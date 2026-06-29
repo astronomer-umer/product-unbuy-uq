@@ -43,7 +43,7 @@ export async function registerAction(
   await signIn("credentials", {
     email,
     password,
-    redirectTo: "/",
+    redirectTo: "/admin",
   });
 
   return undefined;
@@ -71,7 +71,7 @@ export async function loginAction(
     await signIn("credentials", {
       email: parsed.data.email,
       password: parsed.data.password,
-      redirectTo: "/",
+      redirectTo: "/admin",
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "";
@@ -82,5 +82,5 @@ export async function loginAction(
     return { error: "Something went wrong" };
   }
 
-  redirect("/");
+  redirect("/admin");
 }

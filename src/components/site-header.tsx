@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { getAllSellers } from "@/lib/catalog";
 import { auth, signOut } from "@/auth";
+import { getSeller } from "@/lib/catalog";
 
 export async function SiteHeader() {
-  const sellers = getAllSellers();
-  const featured = sellers[0];
+  const seller = getSeller();
   const session = await auth();
+  const isAdmin = !!session?.user;
 
   return (
     <header className="border-b">
@@ -18,14 +18,12 @@ export async function SiteHeader() {
           <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
             Browse
           </Link>
-          {featured && (
-            <Link
-              href={`/sellers/${featured.handle}`}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Sellers
-            </Link>
-          )}
+          <Link
+            href="/shop"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Shop
+          </Link>
           <Link
             href="/about"
             className="text-muted-foreground hover:text-foreground transition-colors"
@@ -33,19 +31,29 @@ export async function SiteHeader() {
             About
           </Link>
           {session?.user ? (
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/" });
-              }}
-            >
-              <button
-                type="submit"
-                className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+            <div className="flex items-center gap-3">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className="font-mono text-xs uppercase tracking-wider text-foreground hover:text-muted-foreground transition-colors"
+                >
+                  Admin
+                </Link>
+              )}
+              <form
+                action={async () => {
+                  "use server";
+                  await signOut({ redirectTo: "/" });
+                }}
               >
-                Sign out · {session.user.email}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Sign out
+                </button>
+              </form>
+            </div>
           ) : (
             <Link
               href="/login"

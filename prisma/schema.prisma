@@ -18,6 +18,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  products Product[]
 }
 
 model Account {
@@ -53,4 +54,36 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  currency    String   @default("PKR")
+  condition   String
+  category    String   @default("Sneakers")
+  size        String?
+  color       String?
+  brand       String?
+  status      String   @default("AVAILABLE") // AVAILABLE | RESERVED | SOLD
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  images ProductImage[]
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
