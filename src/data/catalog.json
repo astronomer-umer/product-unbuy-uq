@@ -1,0 +1,143 @@
+{
+  "name": "unbuy",
+  "description": "Preloved marketplace. Start with one seller, scale to many.",
+  "version": "0.1.0",
+  "sellers": [
+    {
+      "id": "shoemonkey-pk",
+      "handle": "shoemonkey.pk2",
+      "name": "Shoe Monkey PK",
+      "bio": "Preloved kicks, curated. Pakistan.",
+      "instagram": "https://www.instagram.com/shoemonkey.pk2/",
+      "joinedAt": "2026-06-01"
+    }
+  ],
+  "products": [
+    {
+      "id": "sm-001",
+      "sellerId": "shoemonkey-pk",
+      "title": "Nike Air Force 1 Low — White, UK 9",
+      "description": "Preloved AF1s in great shape. Light creasing at the toe box, soles still have plenty of life left. Comes with original box (some wear on box). Perfect daily beaters.",
+      "price": 6500,
+      "currency": "PKR",
+      "condition": "Excellent",
+      "category": "Sneakers",
+      "size": "UK 9",
+      "color": "White",
+      "brand": "Nike",
+      "images": [
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900",
+        "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=900",
+        "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=900"
+      ],
+      "tags": ["sneakers", "nike", "af1", "white"],
+      "status": "available",
+      "createdAt": "2026-06-12T10:00:00Z",
+      "featured": true
+    },
+    {
+      "id": "sm-002",
+      "sellerId": "shoemonkey-pk",
+      "title": "Adidas Samba OG — Black/White, UK 8",
+      "description": "Classic Sambas, barely worn. Indoor use only. No major creases or scuffs. A timeless everyday silhouette.",
+      "price": 7200,
+      "currency": "PKR",
+      "condition": "Like New",
+      "category": "Sneakers",
+      "size": "UK 8",
+      "color": "Black/White",
+      "brand": "Adidas",
+      "images": [
+        "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=900",
+        "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=900"
+      ],
+      "tags": ["sneakers", "adidas", "samba"],
+      "status": "available",
+      "createdAt": "2026-06-10T10:00:00Z",
+      "featured": true
+    },
+    {
+      "id": "sm-003",
+      "sellerId": "shoemonkey-pk",
+      "title": "New Balance 550 — White/Green, UK 9.5",
+      "description": "NB 550 in the classic white/green colorway. Worn a handful of times, still in great shape. Box included.",
+      "price": 9800,
+      "currency": "PKR",
+      "condition": "Like New",
+      "category": "Sneakers",
+      "size": "UK 9.5",
+      "color": "White/Green",
+      "brand": "New Balance",
+      "images": [
+        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900",
+        "https://images.unsplash.com/photo-1539185441755-769473a23570?w=900"
+      ],
+      "tags": ["sneakers", "new balance", "550"],
+      "status": "available",
+      "createdAt": "2026-06-15T10:00:00Z",
+      "featured": false
+    },
+    {
+      "id": "sm-004",
+      "sellerId": "shoemonkey-pk",
+      "title": "Converse Chuck 70 High — Black, UK 8",
+      "description": "Chuck 70s in black canvas. Some paint scuffs along the midsole (see photos). Structurally solid, just character.",
+      "price": 3200,
+      "currency": "PKR",
+      "condition": "Good",
+      "category": "Sneakers",
+      "size": "UK 8",
+      "color": "Black",
+      "brand": "Converse",
+      "images": [
+        "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=900",
+        "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=900"
+      ],
+      "tags": ["sneakers", "converse", "chuck"],
+      "status": "available",
+      "createdAt": "2026-06-08T10:00:00Z",
+      "featured": false
+    },
+    {
+      "id": "sm-005",
+      "sellerId": "shoemonkey-pk",
+      "title": "Vans Old Skool — Black/White, UK 10",
+      "description": "Vans Old Skool, black with white sidestripe. Some sole wear, otherwise in good condition. No rips or tears.",
+      "price": 2800,
+      "currency": "PKR",
+      "condition": "Good",
+      "category": "Sneakers",
+      "size": "UK 10",
+      "color": "Black/White",
+      "brand": "Vans",
+      "images": [
+        "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=900",
+        "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=900"
+      ],
+      "tags": ["sneakers", "vans", "old skool"],
+      "status": "available",
+      "createdAt": "2026-06-05T10:00:00Z",
+      "featured": false
+    },
+    {
+      "id": "sm-006",
+      "sellerId": "shoemonkey-pk",
+      "title": "Puma Suede Classic — Red, UK 9",
+      "description": "Puma Suede in red. Lightly worn, suede still soft. A vintage staple.",
+      "price": 3500,
+      "currency": "PKR",
+      "condition": "Excellent",
+      "category": "Sneakers",
+      "size": "UK 9",
+      "color": "Red",
+      "brand": "Puma",
+      "images": [
+        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=900"
+      ],
+      "tags": ["sneakers", "puma", "suede"],
+      "status": "available",
+      "createdAt": "2026-06-02T10:00:00Z",
+      "featured": false
+    }
+  ]
+}
