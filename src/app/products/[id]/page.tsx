@@ -6,8 +6,8 @@ import {
   formatPrice,
   getProduct,
   getSeller,
-  whatsappLink,
   instagramDmLink,
+  whatsappLink,
 } from "@/lib/catalog";
 import type { Metadata } from "next";
 
@@ -45,16 +45,17 @@ export default async function ProductPage({
 }) {
   const { id } = await params;
   const product = await getProduct(id);
+  if (!product) notFound();
 
-  if (!product) {
-    notFound();
-  }
+  const seller = await getSeller(product.sellerId);
+  if (!seller) notFound();
 
-  const seller = getSeller();
   const isSold = product.status === "SOLD";
-  const message = `Hi! I'm interested in: ${product.title} — ${formatPrice(product.price, product.currency)}. Is it still available?`;
-  const wa = whatsappLink(message);
-  const dm = instagramDmLink(message);
+  const message = `Hi! I'm interested in "${product.title}" — ${formatPrice(product.price, product.currency)} on unbuy. Is it still available?`;
+  const wa = whatsappLink(seller.whatsappE164, message);
+  const dm = seller.handle
+    ? instagramDmLink(seller.handle, message)
+    : seller.instagramUrl ?? "#";
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -84,7 +85,7 @@ export default async function ProductPage({
 
         <div className="lg:sticky lg:top-20 lg:self-start">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            {product.featured && <Badge variant="secondary">Featured</Badge>}
+            {product.featured && <Badge className="bg-lime text-foreground hover:bg-lime/90">Featured</Badge>}
             {isSold && <Badge variant="destructive">Sold</Badge>}
             <Badge variant="outline">{product.condition}</Badge>
           </div>
@@ -128,19 +129,37 @@ export default async function ProductPage({
 
           <Separator className="my-6" />
 
-          <div className="text-sm">
-            <span className="text-muted-foreground">Sold by </span>
+          <div className="rounded-lg border border-border p-4">
+            <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+              Sold by
+            </p>
             <Link
-              href="/shop"
-              className="font-medium hover:underline underline-offset-4"
+              href={`/sellers/${seller.slug}`}
+              className="mt-1 flex items-center justify-between"
             >
-              {seller.name}
+              <div>
+                <div className="font-heading text-xl tracking-wide uppercase">
+                  {seller.name}
+                </div>
+                {seller.handle && (
+                  <div className="mt-0.5 font-mono text-xs text-muted-foreground">
+                    @{seller.handle}
+                  </div>
+                )}
+              </div>
+              <span className="font-mono text-xs uppercase tracking-wider text-cobalt">
+                Visit shop →
+              </span>
             </Link>
           </div>
 
           {isSold ? (
             <div className="mt-6 rounded-lg bg-muted p-4 text-sm text-muted-foreground">
-              This item has been sold. Browse the rest of the catalog.
+              This item has been sold. Browse the rest of {seller.name}&apos;s{" "}
+              <Link href={`/sellers/${seller.slug}`} className="text-cobalt underline-offset-4 hover:underline">
+                shop
+              </Link>
+              .
             </div>
           ) : (
             <div className="mt-6 grid gap-2">
@@ -148,7 +167,7 @@ export default async function ProductPage({
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-cobalt px-4 text-sm font-medium text-white hover:bg-cobalt/90 transition-colors"
               >
                 Message on WhatsApp
               </a>
@@ -161,7 +180,8 @@ export default async function ProductPage({
                 DM on Instagram
               </a>
               <p className="mt-2 text-xs text-muted-foreground">
-                WhatsApp opens a chat pre-filled with the product name and price.
+                Both open a chat pre-filled with the product name and price.
+                You&apos;ll be talking to {seller.name} directly.
               </p>
             </div>
           )}

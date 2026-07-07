@@ -2,11 +2,13 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useTransition } from "react";
+import type { Seller } from "@/lib/catalog";
 
 type Facets = {
   brands: string[];
   sizes: string[];
   conditions: string[];
+  sellers: Seller[];
 };
 
 export function ShopFilters({ facets }: { facets: Facets }) {
@@ -37,7 +39,7 @@ export function ShopFilters({ facets }: { facets: Facets }) {
     });
   };
 
-  const setSingle = (key: "q" | "status", value: string) => {
+  const setSingle = (key: "q" | "status" | "seller", value: string) => {
     update((sp) => {
       if (value) sp.set(key, value);
       else sp.delete(key);
@@ -46,7 +48,9 @@ export function ShopFilters({ facets }: { facets: Facets }) {
 
   const clearAll = () => {
     update((sp) => {
-      for (const k of ["q", "brand", "size", "condition", "status"]) sp.delete(k);
+      for (const k of ["q", "brand", "size", "condition", "status", "seller"]) {
+        sp.delete(k);
+      }
     });
   };
 
@@ -57,10 +61,10 @@ export function ShopFilters({ facets }: { facets: Facets }) {
   };
 
   return (
-    <aside className="space-y-6 lg:sticky lg:top-12 lg:self-start" aria-label="Filters">
+    <aside className="space-y-6 lg:sticky lg:top-20 lg:self-start" aria-label="Filters">
       <div className="flex items-center justify-between">
         <h2 className="font-heading text-xl tracking-wide uppercase">Filter</h2>
-        {(params.toString().length > 0) && (
+        {params.toString().length > 0 && (
           <button
             type="button"
             onClick={clearAll}
@@ -72,7 +76,10 @@ export function ShopFilters({ facets }: { facets: Facets }) {
       </div>
 
       <div className="space-y-2">
-        <label className="font-mono text-xs uppercase tracking-wider text-muted-foreground" htmlFor="q">
+        <label
+          className="font-mono text-xs uppercase tracking-wider text-muted-foreground"
+          htmlFor="q"
+        >
           Search
         </label>
         <input
@@ -84,6 +91,41 @@ export function ShopFilters({ facets }: { facets: Facets }) {
           className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-ring"
         />
       </div>
+
+      {facets.sellers.length > 0 && (
+        <div className="space-y-2">
+          <h3 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+            Seller
+          </h3>
+          <div className="flex flex-col gap-1">
+            {facets.sellers.map((s) => {
+              const active = params.get("seller") === s.slug;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setSingle("seller", active ? "" : s.slug)}
+                  aria-pressed={active}
+                  className={`flex items-center justify-between rounded-md border px-2.5 py-1.5 text-left text-sm transition-colors ${
+                    active
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border bg-background hover:bg-muted"
+                  }`}
+                >
+                  <span className="font-medium">{s.name}</span>
+                  <span
+                    className={`font-mono text-xs uppercase tracking-wider ${
+                      active ? "opacity-80" : "text-cobalt"
+                    }`}
+                  >
+                    {s.category}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <FilterGroup
         title="Status"

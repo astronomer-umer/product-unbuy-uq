@@ -5,16 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { createProduct, type AdminFormState } from "@/app/actions/admin";
 
-export function NewProductForm() {
+export function NewProductForm({
+  sellers,
+}: {
+  sellers: { id: string; name: string }[];
+}) {
   const [state, action, pending] = useActionState<AdminFormState, FormData>(
     createProduct,
     undefined,
@@ -26,6 +23,21 @@ export function NewProductForm() {
         <div className="col-span-2 space-y-1.5">
           <Label htmlFor="title">Title</Label>
           <Input id="title" name="title" required />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="sellerId">Seller</Label>
+          <select
+            id="sellerId"
+            name="sellerId"
+            className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-ring"
+            defaultValue={sellers[0]?.id}
+          >
+            {sellers.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="price">Price</Label>
@@ -57,7 +69,12 @@ export function NewProductForm() {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="condition">Condition</Label>
-          <Input id="condition" name="condition" required placeholder="Like New / Excellent / Good" />
+          <Input
+            id="condition"
+            name="condition"
+            required
+            placeholder="Like New / Excellent / Good"
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="status">Status</Label>
@@ -65,17 +82,25 @@ export function NewProductForm() {
         </div>
         <div className="col-span-2 space-y-1.5">
           <Label htmlFor="images">Images (multiple allowed)</Label>
-          <Input id="images" name="images" type="file" multiple accept="image/*" />
+          <Input
+            id="images"
+            name="images"
+            type="file"
+            multiple
+            accept="image/*"
+          />
         </div>
         <label className="col-span-2 flex items-center gap-2 font-mono text-xs uppercase tracking-wider">
           <input type="checkbox" name="featured" /> Featured on home page
         </label>
       </div>
 
-      {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
+      {state?.error && (
+        <p className="text-sm text-destructive">{state.error}</p>
+      )}
 
       <div className="flex gap-2">
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending} className="bg-cobalt text-white hover:bg-cobalt/90">
           {pending ? "Saving…" : "Create product"}
         </Button>
       </div>

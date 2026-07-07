@@ -18,7 +18,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
-  products Product[]
+  seller   Seller?
 }
 
 model Account {
@@ -56,6 +56,28 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Seller {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  handle        String?  // instagram handle without @
+  bio           String?
+  category      String   @default("Sneakers")
+  whatsappE164  String   // e.g. 923001234567 — no '+' or spaces
+  instagramUrl  String?  // full URL
+  logoUrl       String?
+  bannerUrl     String?
+  featured      Boolean  @default(false)
+  active        Boolean  @default(true)
+  joinedAt      DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  ownerId String  @unique
+  owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  products Product[]
+}
+
 model Product {
   id          String   @id @default(cuid())
   title       String
@@ -67,13 +89,13 @@ model Product {
   size        String?
   color       String?
   brand       String?
-  status      String   @default("AVAILABLE") // AVAILABLE | RESERVED | SOLD
+  status      String   @default("AVAILABLE")
   featured    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  ownerId String
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  sellerId String
+  seller   Seller  @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 
   images ProductImage[]
 }

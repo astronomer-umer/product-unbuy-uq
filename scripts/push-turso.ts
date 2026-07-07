@@ -1,5 +1,5 @@
-// Push schema directly to Turso using the libsql adapter.
-// Use: DATABASE_URL=... TURSO_TOKEN=... pnpm tsx scripts/push-turso.ts
+// Push schema directly to Turso using raw SQL.
+// Use: pnpm tsx scripts/push-turso.ts
 import { PrismaClient } from "@prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 
@@ -11,7 +11,15 @@ async function main() {
   const p = new PrismaClient({ adapter });
 
   const stmts = [
-    `CREATE TABLE IF NOT EXISTS "User" (
+    `DROP TABLE IF EXISTS "ProductImage"`,
+    `DROP TABLE IF EXISTS "Product"`,
+    `DROP TABLE IF EXISTS "Seller"`,
+    `DROP TABLE IF EXISTS "Session"`,
+    `DROP TABLE IF EXISTS "Account"`,
+    `DROP TABLE IF EXISTS "VerificationToken"`,
+    `DROP TABLE IF EXISTS "User"`,
+
+    `CREATE TABLE "User" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "name" TEXT,
       "email" TEXT NOT NULL,
@@ -21,8 +29,9 @@ async function main() {
       "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       "updatedAt" DATETIME NOT NULL
     )`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "User"("email")`,
-    `CREATE TABLE IF NOT EXISTS "Account" (
+    `CREATE UNIQUE INDEX "User_email_key" ON "User"("email")`,
+
+    `CREATE TABLE "Account" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "userId" TEXT NOT NULL,
       "type" TEXT NOT NULL,
@@ -37,23 +46,47 @@ async function main() {
       "session_state" TEXT,
       CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE
     )`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId")`,
-    `CREATE TABLE IF NOT EXISTS "Session" (
+    `CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId")`,
+
+    `CREATE TABLE "Session" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "sessionToken" TEXT NOT NULL,
       "userId" TEXT NOT NULL,
       "expires" DATETIME NOT NULL,
       CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE
     )`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS "Session_sessionToken_key" ON "Session"("sessionToken")`,
-    `CREATE TABLE IF NOT EXISTS "VerificationToken" (
+    `CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken")`,
+
+    `CREATE TABLE "VerificationToken" (
       "identifier" TEXT NOT NULL,
       "token" TEXT NOT NULL,
       "expires" DATETIME NOT NULL
     )`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token")`,
-    `CREATE UNIQUE INDEX IF NOT EXISTS "VerificationToken_token_key" ON "VerificationToken"("token")`,
-    `CREATE TABLE IF NOT EXISTS "Product" (
+    `CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token")`,
+    `CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token")`,
+
+    `CREATE TABLE "Seller" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "slug" TEXT NOT NULL,
+      "name" TEXT NOT NULL,
+      "handle" TEXT,
+      "bio" TEXT,
+      "category" TEXT NOT NULL DEFAULT 'Sneakers',
+      "whatsappE164" TEXT NOT NULL,
+      "instagramUrl" TEXT,
+      "logoUrl" TEXT,
+      "bannerUrl" TEXT,
+      "featured" BOOLEAN NOT NULL DEFAULT 0,
+      "active" BOOLEAN NOT NULL DEFAULT 1,
+      "joinedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      "updatedAt" DATETIME NOT NULL,
+      "ownerId" TEXT NOT NULL,
+      CONSTRAINT "Seller_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User" ("id") ON DELETE CASCADE
+    )`,
+    `CREATE UNIQUE INDEX "Seller_slug_key" ON "Seller"("slug")`,
+    `CREATE UNIQUE INDEX "Seller_ownerId_key" ON "Seller"("ownerId")`,
+
+    `CREATE TABLE "Product" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "title" TEXT NOT NULL,
       "description" TEXT NOT NULL,
@@ -68,10 +101,11 @@ async function main() {
       "featured" BOOLEAN NOT NULL DEFAULT 0,
       "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       "updatedAt" DATETIME NOT NULL,
-      "ownerId" TEXT NOT NULL,
-      CONSTRAINT "Product_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User" ("id") ON DELETE CASCADE
+      "sellerId" TEXT NOT NULL,
+      CONSTRAINT "Product_sellerId_fkey" FOREIGN KEY ("sellerId") REFERENCES "Seller" ("id") ON DELETE CASCADE
     )`,
-    `CREATE TABLE IF NOT EXISTS "ProductImage" (
+
+    `CREATE TABLE "ProductImage" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "url" TEXT NOT NULL,
       "alt" TEXT,
@@ -84,10 +118,10 @@ async function main() {
 
   for (const sql of stmts) {
     await p.$executeRawUnsafe(sql);
-    console.log(`✓ ${sql.split("\n")[0].slice(0, 60)}...`);
+    console.log(`✓ ${sql.slice(0, 70).replace(/\s+/g, " ")}...`);
   }
   await p.$disconnect();
-  console.log("✓ schema pushed to Turso");
+  console.log("\n✓ schema (re)built on Turso");
 }
 
 main().catch((e) => {

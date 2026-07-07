@@ -1,17 +1,18 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
-import { getSeller } from "@/lib/catalog";
+import { getActiveSellers, type Seller } from "@/lib/catalog";
 
-export async function SiteHeader() {
-  const seller = getSeller();
+export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
   const session = await auth();
+  const featured = sellers.filter((s) => s.featured);
+  const rest = sellers.filter((s) => !s.featured);
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 border-b bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/65">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+          className="flex items-center gap-2 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           aria-label="unbuy home"
         >
           <span className="font-heading text-2xl tracking-wider uppercase">
@@ -33,6 +34,12 @@ export async function SiteHeader() {
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
             Shop
+          </Link>
+          <Link
+            href="/sellers"
+            className="text-muted-foreground hover:text-foreground transition-colors hidden md:inline"
+          >
+            Sellers
           </Link>
           <Link
             href="/about"

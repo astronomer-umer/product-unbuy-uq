@@ -1,19 +1,25 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatPrice, type Product } from "@/lib/catalog";
+import { formatPrice, type Product, type Seller } from "@/lib/catalog";
 import Link from "next/link";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({
+  product,
+  seller,
+}: {
+  product: Product;
+  seller?: Seller;
+}) {
   const cover = product.images[0]?.url;
   const isSold = product.status === "SOLD";
 
   return (
     <Link
       href={`/products/${product.id}`}
-      className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-xl"
+      className="group block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       aria-label={`${product.title} — ${formatPrice(product.price, product.currency)}`}
     >
-      <Card className="h-full overflow-hidden border-transparent transition-all duration-300 group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:border-border group-focus-visible:border-border">
+      <Card className="h-full overflow-hidden border-transparent transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-border group-hover:shadow-md">
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
           {cover && (
             /* eslint-disable-next-line @next/next/no-img-element */
@@ -21,7 +27,7 @@ export function ProductCard({ product }: { product: Product }) {
               src={cover}
               alt={product.title}
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
           )}
           {isSold && (
@@ -31,7 +37,7 @@ export function ProductCard({ product }: { product: Product }) {
           )}
           <div className="absolute top-2 left-2 z-10 flex gap-1">
             {product.featured && !isSold && (
-              <Badge variant="secondary">Featured</Badge>
+              <Badge className="bg-lime text-foreground hover:bg-lime/90">Featured</Badge>
             )}
           </div>
         </div>
@@ -48,6 +54,11 @@ export function ProductCard({ product }: { product: Product }) {
             {product.condition}
           </span>
         </CardContent>
+        {seller && (
+          <div className="border-t px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+            <span className="text-cobalt">{seller.name}</span>
+          </div>
+        )}
       </Card>
     </Link>
   );

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Bebas_Neue, Inter, JetBrains_Mono } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { getSeller } from "@/lib/catalog";
+import { getActiveSellers } from "@/lib/catalog";
 import "./globals.css";
 
 const bebas = Bebas_Neue({
@@ -23,55 +23,54 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-const seller = getSeller();
-
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:6969",
   ),
   title: {
-    default: `${seller.name} · unbuy`,
-    template: `%s · ${seller.name}`,
+    default: "unbuy · Preloved, on purpose",
+    template: "%s · unbuy",
   },
-  description: seller.bio,
+  description:
+    "A curated marketplace for preloved goods. Real sellers, real photos, no noise.",
   keywords: [
     "preloved",
-    "sneakers",
+    "secondhand",
+    "marketplace",
     "pakistan",
-    seller.handle,
-    seller.name,
-    "second hand shoes",
+    "vintage",
+    "sneakers",
+    "thrift",
   ],
-  authors: [{ name: seller.name }],
   openGraph: {
     type: "website",
-    title: `${seller.name} · unbuy`,
-    description: seller.bio,
+    title: "unbuy · Preloved, on purpose",
+    description:
+      "A curated marketplace for preloved goods. Real sellers, real photos, no noise.",
     siteName: "unbuy",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${seller.name} · unbuy`,
-    description: seller.bio,
+    title: "unbuy · Preloved, on purpose",
+    description:
+      "A curated marketplace for preloved goods. Real sellers, real photos, no noise.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const sellers = await getActiveSellers();
   return (
     <html
       lang="en"
       className={`${inter.variable} ${bebas.variable} ${jetbrains.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
-        <SiteHeader />
+        <SiteHeader sellers={sellers} />
         {children}
         <SiteFooter />
       </body>

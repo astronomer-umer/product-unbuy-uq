@@ -1,5 +1,3 @@
-// Prisma 7 configuration: datasource URL goes here (not in schema.prisma).
-// The PrismaClient at runtime uses a driver adapter (see src/lib/db.ts).
 import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 

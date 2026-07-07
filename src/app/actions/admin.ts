@@ -13,6 +13,23 @@ async function requireAdmin() {
   return session.user.id;
 }
 
+async function resolveSellerId(userId: string): Promise<string> {
+  // Admin users own a Seller record (1:1). If they don't have one yet,
+  // auto-create a placeholder one so products can be assigned.
+  const seller = await prisma.seller.findUnique({ where: { ownerId: userId } });
+  if (seller) return seller.id;
+  const created = await prisma.seller.create({
+    data: {
+      ownerId: userId,
+      slug: `admin-${userId.slice(-6).toLowerCase()}`,
+      name: "Admin Shop",
+      whatsappE164: "0000000000",
+      bio: "Admin-created shop. Rename it.",
+    },
+  });
+  return created.id;
+}
+
 const productSchema = z.object({
   title: z.string().min(1).max(160),
   description: z.string().min(1).max(4000),
@@ -25,6 +42,7 @@ const productSchema = z.object({
   brand: z.string().optional(),
   status: z.enum(["AVAILABLE", "RESERVED", "SOLD"]).default("AVAILABLE"),
   featured: z.union([z.literal("on"), z.literal("off"), z.undefined()]).optional(),
+  sellerId: z.string().optional(),
 });
 
 export type AdminFormState = { error?: string; success?: string } | undefined;
@@ -33,7 +51,7 @@ export async function createProduct(
   _prev: AdminFormState,
   formData: FormData,
 ): Promise<AdminFormState> {
-  const ownerId = await requireAdmin();
+  const userId = await requireAdmin();
 
   const parsed = productSchema.safeParse({
     title: formData.get("title"),
@@ -47,13 +65,18 @@ export async function createProduct(
     brand: formData.get("brand") || undefined,
     status: formData.get("status") || "AVAILABLE",
     featured: formData.get("featured") ?? undefined,
+    sellerId: formData.get("sellerId") || undefined,
   });
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const files = formData.getAll("images").filter((f): f is File => f instanceof File && f.size > 0);
+  const sellerId = parsed.data.sellerId ?? (await resolveSellerId(userId));
+
+  const files = formData
+    .getAll("images")
+    .filter((f): f is File => f instanceof File && f.size > 0);
   const imageUrls: string[] = [];
   for (const file of files) {
     const r = await saveUpload(file);
@@ -63,17 +86,31 @@ export async function createProduct(
 
   await prisma.product.create({
     data: {
-      ...parsed.data,
+      title: parsed.data.title,
+      description: parsed.data.description,
+      price: parsed.data.price,
+      currency: parsed.data.currency,
+      condition: parsed.data.condition,
+      category: parsed.data.category,
+      size: parsed.data.size ?? null,
+      color: parsed.data.color ?? null,
+      brand: parsed.data.brand ?? null,
+      status: parsed.data.status,
       featured: parsed.data.featured === "on",
-      ownerId,
+      sellerId,
       images: {
-        create: imageUrls.map((url, i) => ({ url, alt: parsed.data.title, order: i })),
+        create: imageUrls.map((url, i) => ({
+          url,
+          alt: parsed.data.title,
+          order: i,
+        })),
       },
     },
   });
 
   revalidatePath("/");
   revalidatePath("/shop");
+  revalidatePath("/sellers");
   revalidatePath("/admin");
   redirect("/admin");
 }
@@ -97,13 +134,16 @@ export async function updateProduct(
     brand: formData.get("brand") || undefined,
     status: formData.get("status") || "AVAILABLE",
     featured: formData.get("featured") ?? undefined,
+    sellerId: formData.get("sellerId") || undefined,
   });
 
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const files = formData.getAll("images").filter((f): f is File => f instanceof File && f.size > 0);
+  const files = formData
+    .getAll("images")
+    .filter((f): f is File => f instanceof File && f.size > 0);
   const newImageUrls: string[] = [];
   for (const file of files) {
     const r = await saveUpload(file);
@@ -115,8 +155,18 @@ export async function updateProduct(
     await tx.product.update({
       where: { id },
       data: {
-        ...parsed.data,
+        title: parsed.data.title,
+        description: parsed.data.description,
+        price: parsed.data.price,
+        currency: parsed.data.currency,
+        condition: parsed.data.condition,
+        category: parsed.data.category,
+        size: parsed.data.size ?? null,
+        color: parsed.data.color ?? null,
+        brand: parsed.data.brand ?? null,
+        status: parsed.data.status,
         featured: parsed.data.featured === "on",
+        ...(parsed.data.sellerId ? { sellerId: parsed.data.sellerId } : {}),
       },
     });
     if (newImageUrls.length > 0) {
@@ -134,6 +184,7 @@ export async function updateProduct(
 
   revalidatePath("/");
   revalidatePath("/shop");
+  revalidatePath("/sellers");
   revalidatePath(`/products/${id}`);
   revalidatePath("/admin");
   redirect("/admin");
@@ -144,6 +195,7 @@ export async function deleteProduct(id: string): Promise<void> {
   await prisma.product.delete({ where: { id } });
   revalidatePath("/");
   revalidatePath("/shop");
+  revalidatePath("/sellers");
   revalidatePath("/admin");
   redirect("/admin");
 }
@@ -153,6 +205,7 @@ export async function markSold(id: string): Promise<void> {
   await prisma.product.update({ where: { id }, data: { status: "SOLD" } });
   revalidatePath("/");
   revalidatePath("/shop");
+  revalidatePath("/sellers");
   revalidatePath(`/products/${id}`);
   redirect("/admin");
 }
@@ -162,6 +215,7 @@ export async function markAvailable(id: string): Promise<void> {
   await prisma.product.update({ where: { id }, data: { status: "AVAILABLE" } });
   revalidatePath("/");
   revalidatePath("/shop");
+  revalidatePath("/sellers");
   revalidatePath(`/products/${id}`);
   redirect("/admin");
 }

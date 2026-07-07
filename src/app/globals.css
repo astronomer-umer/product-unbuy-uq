@@ -34,6 +34,8 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-lime: var(--lime);
+  --color-cobalt: var(--cobalt);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -46,8 +48,13 @@
 /*
  * unbuy palette
  * -------------
- * A warm, off-white paper background. Bone + deep ink.
- * Accent is a muted clay/terracotta — desaturated, not loud.
+ * Main:        off-white paper
+ * Foreground:  near-black ink
+ * Lime:        dark lime accent  (citrus, slightly olive)
+ * Cobalt:      dark cobalt accent (saturated, classic blue)
+ *
+ * Two-accent system: lime is the "fresh / active" signal,
+ * cobalt is the "trust / structural" signal.
  */
 :root {
   --background: oklch(0.985 0.005 80);
@@ -62,12 +69,17 @@
   --secondary-foreground: oklch(0.18 0.01 60);
   --muted: oklch(0.955 0.008 80);
   --muted-foreground: oklch(0.5 0.01 60);
-  --accent: oklch(0.62 0.13 45);
+  --accent: var(--cobalt);
   --accent-foreground: oklch(0.985 0.005 80);
   --destructive: oklch(0.55 0.21 27);
   --border: oklch(0.9 0.008 80);
   --input: oklch(0.9 0.008 80);
-  --ring: oklch(0.62 0.13 45);
+  --ring: var(--cobalt);
+
+  /* Brand accents — dark lime + dark cobalt */
+  --lime: oklch(0.62 0.18 130);
+  --cobalt: oklch(0.42 0.18 260);
+
   --sidebar: oklch(0.985 0.005 80);
   --sidebar-foreground: oklch(0.18 0.01 60);
   --sidebar-primary: oklch(0.18 0.01 60);
@@ -75,7 +87,8 @@
   --sidebar-accent: oklch(0.955 0.008 80);
   --sidebar-accent-foreground: oklch(0.18 0.01 60);
   --sidebar-border: oklch(0.9 0.008 80);
-  --sidebar-ring: oklch(0.62 0.13 45);
+  --sidebar-ring: oklch(0.42 0.18 260);
+
   --radius: 0.625rem;
 }
 
@@ -89,7 +102,6 @@
   html {
     @apply font-sans;
   }
-  /* Visible focus for keyboard users */
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
