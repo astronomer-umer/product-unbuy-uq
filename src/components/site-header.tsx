@@ -5,18 +5,28 @@ import { getSeller } from "@/lib/catalog";
 export async function SiteHeader() {
   const seller = getSeller();
   const session = await auth();
-  const isAdmin = !!session?.user;
 
   return (
-    <header className="border-b">
+    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="font-heading text-2xl tracking-wider uppercase">unbuy</span>
-          <span className="font-mono text-xs text-muted-foreground">.preloved</span>
+        <Link
+          href="/"
+          className="flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring rounded-sm"
+          aria-label="unbuy home"
+        >
+          <span className="font-heading text-2xl tracking-wider uppercase">
+            unbuy
+          </span>
+          <span className="font-mono text-xs text-muted-foreground hidden sm:inline">
+            .preloved
+          </span>
         </Link>
-        <nav className="flex items-center gap-6 text-sm">
-          <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-            Browse
+        <nav className="flex items-center gap-5 text-sm" aria-label="Main">
+          <Link
+            href="/"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Home
           </Link>
           <Link
             href="/shop"
@@ -26,20 +36,18 @@ export async function SiteHeader() {
           </Link>
           <Link
             href="/about"
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground transition-colors hidden sm:inline"
           >
             About
           </Link>
           {session?.user ? (
             <div className="flex items-center gap-3">
-              {isAdmin && (
-                <Link
-                  href="/admin"
-                  className="font-mono text-xs uppercase tracking-wider text-foreground hover:text-muted-foreground transition-colors"
-                >
-                  Admin
-                </Link>
-              )}
+              <Link
+                href="/admin"
+                className="font-mono text-xs uppercase tracking-wider text-foreground hover:text-muted-foreground transition-colors"
+              >
+                Admin
+              </Link>
               <form
                 action={async () => {
                   "use server";

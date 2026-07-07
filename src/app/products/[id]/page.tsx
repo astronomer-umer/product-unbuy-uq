@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -8,6 +9,34 @@ import {
   whatsappLink,
   instagramDmLink,
 } from "@/lib/catalog";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProduct(id);
+  if (!product) return { title: "Not found" };
+  const cover = product.images[0]?.url;
+  return {
+    title: product.title,
+    description: product.description.slice(0, 160),
+    openGraph: {
+      title: product.title,
+      description: product.description.slice(0, 160),
+      images: cover ? [{ url: cover }] : undefined,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description: product.description.slice(0, 160),
+      images: cover ? [cover] : undefined,
+    },
+  };
+}
 
 export default async function ProductPage({
   params,
@@ -29,7 +58,13 @@ export default async function ProductPage({
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
-      <div className="grid gap-8 lg:grid-cols-2">
+      <nav className="mb-6 font-mono text-xs uppercase tracking-wider text-muted-foreground" aria-label="Breadcrumb">
+        <Link href="/shop" className="hover:text-foreground transition-colors">
+          ← Back to shop
+        </Link>
+      </nav>
+
+      <div className="grid gap-10 lg:grid-cols-2">
         <div className="space-y-3">
           {product.images.map((img, i) => (
             <div
@@ -39,15 +74,16 @@ export default async function ProductPage({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={img.url}
-                alt={`${product.title} — ${i + 1}`}
+                alt={`${product.title} — image ${i + 1}`}
+                loading={i === 0 ? "eager" : "lazy"}
                 className="h-full w-full object-cover"
               />
             </div>
           ))}
         </div>
 
-        <div className="lg:sticky lg:top-12 lg:self-start">
-          <div className="mb-2 flex items-center gap-2">
+        <div className="lg:sticky lg:top-20 lg:self-start">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
             {product.featured && <Badge variant="secondary">Featured</Badge>}
             {isSold && <Badge variant="destructive">Sold</Badge>}
             <Badge variant="outline">{product.condition}</Badge>
@@ -94,12 +130,17 @@ export default async function ProductPage({
 
           <div className="text-sm">
             <span className="text-muted-foreground">Sold by </span>
-            <span className="font-medium">{seller.name}</span>
+            <Link
+              href="/shop"
+              className="font-medium hover:underline underline-offset-4"
+            >
+              {seller.name}
+            </Link>
           </div>
 
           {isSold ? (
             <div className="mt-6 rounded-lg bg-muted p-4 text-sm text-muted-foreground">
-              This item has been sold. Check out the other listings below.
+              This item has been sold. Browse the rest of the catalog.
             </div>
           ) : (
             <div className="mt-6 grid gap-2">
@@ -107,7 +148,7 @@ export default async function ProductPage({
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-8 w-full items-center justify-center rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/80 transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 Message on WhatsApp
               </a>
@@ -115,12 +156,12 @@ export default async function ProductPage({
                 href={dm}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-8 w-full items-center justify-center rounded-lg border border-border bg-background px-2.5 text-sm font-medium hover:bg-muted transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-lg border border-border bg-background px-4 text-sm font-medium hover:bg-muted transition-colors"
               >
                 DM on Instagram
               </a>
               <p className="mt-2 text-xs text-muted-foreground">
-                Tapping WhatsApp opens a chat pre-filled with the product name and price.
+                WhatsApp opens a chat pre-filled with the product name and price.
               </p>
             </div>
           )}

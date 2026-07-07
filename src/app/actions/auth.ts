@@ -5,11 +5,16 @@ import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib/db";
+import { rateLimit } from "@/lib/rate-limit";
+import { getClientIp } from "@/lib/ip";
 
 const registerSchema = z.object({
-  name: z.string().min(1, "Name required").max(80),
-  email: z.string().email("Valid email required"),
-  password: z.string().min(8, "Min 8 characters"),
+  name: z.string().trim().min(1, "Name required").max(80),
+  email: z.string().trim().toLowerCase().email("Valid email required"),
+  password: z
+    .string()
+    .min(8, "Min 8 characters")
+    .max(200, "Max 200 characters"),
 });
 
 export type FormState = { error?: string } | undefined;
@@ -18,6 +23,12 @@ export async function registerAction(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  const ip = getClientIp();
+  const rl = rateLimit(`register:${ip}`, 5, 60 * 60 * 1000);
+  if (!rl.ok) {
+    return { error: "Too many attempts. Try again later." };
+  }
+
   const parsed = registerSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -35,7 +46,7 @@ export async function registerAction(
     return { error: "An account with that email already exists" };
   }
 
-  const hashed = await bcrypt.hash(password, 10);
+  const hashed = await bcrypt.hash(password, 12);
   await prisma.user.create({
     data: { name, email, password: hashed },
   });
@@ -50,14 +61,20 @@ export async function registerAction(
 }
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+  email: z.string().trim().toLowerCase().email(),
+  password: z.string().min(1).max(200),
 });
 
 export async function loginAction(
   _prev: FormState,
   formData: FormData,
 ): Promise<FormState> {
+  const ip = getClientIp();
+  const rl = rateLimit(`login:${ip}`, 10, 60 * 60 * 1000);
+  if (!rl.ok) {
+    return { error: "Too many attempts. Try again later." };
+  }
+
   const parsed = loginSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),

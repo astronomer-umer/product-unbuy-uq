@@ -72,6 +72,71 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   return rows.map((r) => rowToProduct(r as ProductWithImages)!).filter(Boolean);
 }
 
+export async function getFilterFacets() {
+  const rows = await prisma.product.findMany({
+    select: { brand: true, size: true, condition: true, category: true },
+  });
+
+  const uniq = <T,>(arr: (T | null)[]) =>
+    Array.from(new Set(arr.filter((x): x is T => x !== null && x !== ""))).sort();
+
+  return {
+    brands: uniq(rows.map((r) => r.brand)),
+    sizes: uniq(rows.map((r) => r.size)),
+    conditions: uniq(rows.map((r) => r.condition)),
+    categories: uniq(rows.map((r) => r.category)),
+  };
+}
+
+export type SearchParams = {
+  q?: string;
+  brand?: string | string[];
+  size?: string | string[];
+  condition?: string | string[];
+  status?: string;
+};
+
+function asArray(v: string | string[] | undefined): string[] {
+  if (!v) return [];
+  return Array.isArray(v) ? v : [v];
+}
+
+export async function searchProducts(params: SearchParams): Promise<Product[]> {
+  const q = (params.q ?? "").trim();
+  const brands = asArray(params.brand);
+  const sizes = asArray(params.size);
+  const conditions = asArray(params.condition);
+  const status = params.status;
+
+  const where: import("@prisma/client").Prisma.ProductWhereInput = {
+    AND: [
+      brands.length > 0 ? { brand: { in: brands } } : {},
+      sizes.length > 0 ? { size: { in: sizes } } : {},
+      conditions.length > 0 ? { condition: { in: conditions } } : {},
+      status === "AVAILABLE" || status === "SOLD" || status === "RESERVED"
+        ? { status }
+        : {},
+      q
+        ? {
+            OR: [
+              { title: { contains: q } },
+              { description: { contains: q } },
+              { brand: { contains: q } },
+              { category: { contains: q } },
+            ],
+          }
+        : {},
+    ],
+  };
+
+  const rows = await prisma.product.findMany({
+    where,
+    include: { images: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return rows.map((r) => rowToProduct(r as ProductWithImages)!).filter(Boolean);
+}
+
 export function formatPrice(value: number, currency = "PKR"): string {
   return `${currency} ${value.toLocaleString("en-PK")}`;
 }
