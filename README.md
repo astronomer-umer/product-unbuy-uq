@@ -11,7 +11,8 @@ can scale to multiple sellers later without rewrites.
 - TypeScript
 - Tailwind CSS 4
 - shadcn/ui (base-ui)
-- Prisma 7 + SQLite (libsql driver adapter)
+- Prisma 7 + libSQL/Turso (SQLite-compatible, works in serverless)
+- Local dev uses `file:./dev.db`; production uses Turso
 - Auth.js v5 (NextAuth beta) — credentials provider, JWT sessions
 - Zod for validation
 - bcryptjs for password hashing (cost 12)
@@ -26,6 +27,29 @@ pnpm prisma db push      # creates dev.db
 pnpm db:seed             # seeds 6 products + 2 user accounts
 pnpm dev                 # http://localhost:6969
 ```
+
+## Deploying to production
+
+Uses [Turso](https://turso.tech) for the database (libSQL, free tier).
+
+1. Create a Turso database at turso.tech
+2. Grab the URL (`libsql://...turso.io`) and a token
+3. Push schema + seed: set `DATABASE_URL` + `TURSO_TOKEN` env, then run:
+   ```bash
+   pnpm exec tsx scripts/push-turso.ts
+   pnpm db:seed
+   ```
+4. Generate `AUTH_SECRET`: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`
+5. Deploy:
+   ```bash
+   vercel link
+   vercel env add DATABASE_URL production
+   vercel env add TURSO_TOKEN production
+   vercel env add AUTH_SECRET production
+   vercel env add NEXT_PUBLIC_SITE_URL production
+   vercel --prod
+   ```
+6. After first deploy, change the seeded admin passwords.
 
 ## Seeded accounts
 
