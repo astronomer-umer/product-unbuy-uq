@@ -73,10 +73,10 @@ export default function PrivacyPage() {
             You can request export or deletion of your data at any time by
             emailing{" "}
             <a
-              href="mailto:hello@unbuy.pk"
-              className="text-lime underline-offset-4 hover:underline"
+              href="mailto:astronomer.umer@gmail.com"
+              className="text-cobalt underline-offset-4 hover:underline"
             >
-              hello@unbuy.pk
+              astronomer.umer@gmail.com
             </a>
             . We respond within 7 days.
           </p>

@@ -33,7 +33,7 @@ export default function OnboardPage() {
             What you get
           </h2>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li>· A real storefront at <span className="font-mono">unbuy.pk/your-shop</span></li>
+            <li>· A real storefront at <span className="font-mono">unbuy-store.vercel.app/your-shop</span></li>
             <li>· Your own branded page, no unbuy ads or noise.</li>
             <li>· Product upload, mark sold, edit — built in.</li>
             <li>· Buyers tap WhatsApp / DM and reach you directly.</li>
@@ -47,10 +47,10 @@ export default function OnboardPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Email{" "}
             <a
-              href="mailto:sellers@unbuy.pk"
-              className="text-lime underline-offset-4 hover:underline"
+              href="mailto:astronomer.umer@gmail.com"
+              className="text-cobalt underline-offset-4 hover:underline"
             >
-              sellers@unbuy.pk
+              astronomer.umer@gmail.com
             </a>{" "}
             with a link to your Instagram and 3 photos of items you&apos;d sell.
             We&apos;ll get back within 48 hours.

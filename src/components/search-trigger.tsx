@@ -109,18 +109,18 @@ function SearchModal({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-label="Search"
-      className="fixed inset-0 z-50 bg-background/95 backdrop-blur-md"
+      className="fixed inset-0 z-50 surface-cobalt"
     >
       <div className="mx-auto max-w-3xl px-6 pt-20">
         <div className="flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <span className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
             Search the shop
           </span>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close search"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground/80 hover:text-foreground hover:bg-foreground/5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full text-background/80 hover:text-background hover:bg-background/10 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime"
           >
             <svg
               width="18"
@@ -142,7 +142,7 @@ function SearchModal({ onClose }: { onClose: () => void }) {
         <form onSubmit={handleSubmit} className="mt-6">
           <div className="relative">
             <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-background/60"
               width="22"
               height="22"
               viewBox="0 0 24 24"
@@ -162,17 +162,17 @@ function SearchModal({ onClose }: { onClose: () => void }) {
               value={q}
               onChange={(e) => handleChange(e.target.value)}
               placeholder="Nike, leather jacket, something for a wedding…"
-              className="w-full rounded-2xl border border-border bg-background pl-12 pr-5 py-4 text-lg focus-visible:outline-2 focus-visible:outline-ring"
+              className="w-full rounded-2xl border border-background/15 bg-background px-12 py-4 text-lg text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-lime"
             />
           </div>
-          <p className="mt-3 font-mono text-xs text-muted-foreground">
+          <p className="mt-3 font-mono text-xs text-background/60">
             Tip: search by feel, not by keyword. &ldquo;vintage denim&rdquo; beats &ldquo;jeans&rdquo;.
           </p>
         </form>
 
         {q.trim().length >= 2 && (
           <div className="mt-8">
-            <h3 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+            <h3 className="font-mono text-xs uppercase tracking-wider text-lime">
               {loading ? "Searching…" : suggestions.length > 0 ? "Best matches" : "No matches yet"}
             </h3>
             <ul className="mt-3 divide-y divide-border rounded-2xl border border-border bg-background">
@@ -211,21 +211,21 @@ function SearchModal({ onClose }: { onClose: () => void }) {
         {q.trim().length < 2 && (
           <div className="mt-12">
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-lime">
                 Recent searches
               </h3>
               {recents.length > 0 && (
                 <button
                   type="button"
                   onClick={clearRecents}
-                  className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+                  className="font-mono text-xs uppercase tracking-wider text-background/70 hover:text-background transition-colors"
                 >
                   Clear
                 </button>
               )}
             </div>
             {recents.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-background/70">
                 Nothing here yet. Try something.
               </p>
             ) : (
@@ -244,7 +244,7 @@ function SearchModal({ onClose }: { onClose: () => void }) {
               </ul>
             )}
             <div className="mt-12">
-              <h3 className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
+              <h3 className="font-mono text-xs uppercase tracking-wider text-lime">
                 Try
               </h3>
               <ul className="mt-3 flex flex-wrap gap-2">

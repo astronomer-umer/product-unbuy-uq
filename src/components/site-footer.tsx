@@ -138,10 +138,10 @@ export async function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@unbuy.pk"
+                  href="mailto:astronomer.umer@gmail.com"
                   className="opacity-85 hover:opacity-100 transition-opacity"
                 >
-                  hello@unbuy.pk
+                  astronomer.umer@gmail.com
                 </a>
               </li>
             </ul>

@@ -70,10 +70,10 @@ export default function AboutPage() {
           <p className="mt-3 text-muted-foreground">
             Questions, partnerships, or a seller you think we should know about:{" "}
             <a
-              href="mailto:hello@unbuy.pk"
-              className="text-lime underline-offset-4 hover:underline"
+              href="mailto:astronomer.umer@gmail.com"
+              className="text-cobalt underline-offset-4 hover:underline"
             >
-              hello@unbuy.pk
+              astronomer.umer@gmail.com
             </a>
           </p>
         </div>

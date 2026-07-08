@@ -26,7 +26,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28 sm:pb-32">
           <div className="inline-flex items-center gap-2 rounded-full border border-lime/40 bg-lime/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-lime">
             <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-            Preloved · Pakistan · Always
+            Enabling sustainable consumerism in Pakistan.
           </div>
 
           <h1 className="mt-6 font-heading text-7xl leading-[0.88] tracking-tight sm:text-9xl">
@@ -58,7 +58,6 @@ export default async function HomePage() {
           <dl className="mt-12 flex flex-wrap items-end gap-x-10 gap-y-4">
             <Stat label="sellers" value={String(sellers.length)} />
             <Stat label="featured drops" value={String(featured.length)} />
-            <Stat label="always" value="preloved" highlight />
           </dl>
         </div>
       </section>
@@ -138,7 +137,7 @@ export default async function HomePage() {
             />
             <Pillar
               title="Direct contact."
-              body="Tap WhatsApp or Instagram on any item — the chat opens pre-filled with the product. No middlemen, no algorithms."
+              body="Tap WhatsApp or Instagram on any item — the chat opens pre-filled with the product."
             />
             <Pillar
               title="On purpose."
