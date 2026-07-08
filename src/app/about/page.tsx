@@ -13,7 +13,7 @@ export default function AboutPage() {
       </p>
       <h1 className="mt-3 font-heading text-6xl tracking-wide uppercase sm:text-7xl">
         Let&apos;s{" "}
-        <span className="text-cobalt">Unbuy</span>{" "}
+        <span className="text-lime">Unbuy</span>{" "}
         What You Buy!
       </h1>
 
@@ -54,7 +54,7 @@ export default function AboutPage() {
             Already running a catalog on Instagram?{" "}
             <Link
               href="/sellers/onboard"
-              className="text-cobalt underline-offset-4 hover:underline"
+              className="text-lime underline-offset-4 hover:underline"
             >
               Apply to join
             </Link>{" "}
@@ -71,7 +71,7 @@ export default function AboutPage() {
             Questions, partnerships, or a seller you think we should know about:{" "}
             <a
               href="mailto:hello@unbuy.pk"
-              className="text-cobalt underline-offset-4 hover:underline"
+              className="text-lime underline-offset-4 hover:underline"
             >
               hello@unbuy.pk
             </a>

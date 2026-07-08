@@ -30,8 +30,11 @@ export default async function SellerPage({
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
       {/* Brand header */}
-      <section className="mb-12 overflow-hidden rounded-2xl bg-cobalt text-white">
-        <div className="grid gap-6 p-8 sm:p-12 md:grid-cols-[1fr_auto] md:items-end">
+      <section className="mb-12 overflow-hidden rounded-3xl bg-foreground text-background">
+        <div className="absolute inset-0 -z-10 opacity-50" aria-hidden="true">
+          <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-lime/30 blur-3xl" />
+        </div>
+        <div className="relative grid gap-6 p-8 sm:p-12 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.25em] text-lime">
               {seller.category}
@@ -56,7 +59,7 @@ export default async function SellerPage({
                 href={seller.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-9 items-center rounded-md border border-white/30 bg-transparent px-3 text-sm font-medium hover:bg-white/10 transition-colors"
+                className="inline-flex h-9 items-center rounded-full border border-background/30 bg-transparent px-4 text-sm font-medium hover:bg-background/10 transition-colors"
               >
                 Instagram
               </a>
@@ -65,7 +68,7 @@ export default async function SellerPage({
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-9 items-center rounded-md bg-lime px-3 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
+              className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
             >
               WhatsApp
             </a>

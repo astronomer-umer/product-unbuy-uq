@@ -100,7 +100,7 @@ export function NewProductForm({
       )}
 
       <div className="flex gap-2">
-        <Button type="submit" disabled={pending} className="bg-cobalt text-white hover:bg-cobalt/90">
+        <Button type="submit" disabled={pending} className="bg-lime text-white hover:bg-lime/90">
           {pending ? "Saving…" : "Create product"}
         </Button>
       </div>

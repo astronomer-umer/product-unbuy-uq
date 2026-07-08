@@ -8,7 +8,7 @@ export default async function SellersPage() {
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
       <div className="mb-10">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-cobalt">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
           The roster
         </p>
         <h1 className="mt-3 font-heading text-5xl tracking-wide uppercase sm:text-6xl">
@@ -28,7 +28,7 @@ export default async function SellersPage() {
           </p>
           <Link
             href="/sellers/onboard"
-            className="mt-4 inline-flex h-9 items-center rounded-lg bg-cobalt px-4 text-sm font-medium text-white hover:bg-cobalt/90 transition-colors"
+            className="mt-4 inline-flex h-9 items-center rounded-lg bg-lime px-4 text-sm font-medium text-white hover:bg-lime/90 transition-colors"
           >
             Apply to join
           </Link>

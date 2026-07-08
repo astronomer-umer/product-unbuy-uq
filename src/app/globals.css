@@ -46,15 +46,14 @@
 }
 
 /*
- * unbuy palette
- * -------------
- * Main:        off-white paper
- * Foreground:  near-black ink
- * Lime:        dark lime accent  (citrus, slightly olive)
- * Cobalt:      dark cobalt accent (saturated, classic blue)
+ * unbuy palette v2
+ * ----------------
+ * Off-white → light gray page gradient (no flat fill).
+ * Foreground = deep ink (warm-tinted near-black).
+ * LIME  — primary brand accent (freshness, energy, "preloved = better").
+ * COBALT — secondary accent (structure, trust, contrast). Used sparingly.
  *
- * Two-accent system: lime is the "fresh / active" signal,
- * cobalt is the "trust / structural" signal.
+ * The lime→cobalt gradient text utility comes from .text-gradient-brand.
  */
 :root {
   --background: oklch(0.985 0.005 80);
@@ -65,19 +64,20 @@
   --popover-foreground: oklch(0.18 0.01 60);
   --primary: oklch(0.18 0.01 60);
   --primary-foreground: oklch(0.985 0.005 80);
-  --secondary: oklch(0.955 0.008 80);
+  --secondary: oklch(0.965 0.008 80);
   --secondary-foreground: oklch(0.18 0.01 60);
   --muted: oklch(0.955 0.008 80);
   --muted-foreground: oklch(0.5 0.01 60);
-  --accent: var(--cobalt);
-  --accent-foreground: oklch(0.985 0.005 80);
+  --accent: var(--lime);
+  --accent-foreground: oklch(0.18 0.01 60);
   --destructive: oklch(0.55 0.21 27);
   --border: oklch(0.9 0.008 80);
   --input: oklch(0.9 0.008 80);
-  --ring: var(--cobalt);
+  --ring: var(--lime);
 
-  /* Brand accents — dark lime + dark cobalt */
-  --lime: oklch(0.62 0.18 130);
+  /* Lime: slightly deeper than before for legibility on white */
+  --lime: oklch(0.68 0.18 130);
+  /* Cobalt: same as before — kept as a quiet secondary */
   --cobalt: oklch(0.42 0.18 260);
 
   --sidebar: oklch(0.985 0.005 80);
@@ -87,7 +87,7 @@
   --sidebar-accent: oklch(0.955 0.008 80);
   --sidebar-accent-foreground: oklch(0.18 0.01 60);
   --sidebar-border: oklch(0.9 0.008 80);
-  --sidebar-ring: oklch(0.42 0.18 260);
+  --sidebar-ring: oklch(0.68 0.18 130);
 
   --radius: 0.625rem;
 }
@@ -96,8 +96,17 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
+  }
+  /* Page-level soft gradient: off-white at top → light gray at bottom.
+   * Fixed attachment keeps it consistent during scroll. */
+  body {
+    background:
+      radial-gradient(ellipse at top, oklch(1 0 0), transparent 70%),
+      linear-gradient(180deg, oklch(0.985 0.005 80) 0%, oklch(0.94 0.008 80) 100%);
+    background-attachment: fixed;
   }
   html {
     @apply font-sans;
@@ -107,4 +116,26 @@
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
+}
+
+/* The brand gradient text utility — applies an angular gradient that
+ * reads lime→cobalt on the "Unbuy" word in headings. Background-clip
+ * keeps the fill inside the glyphs. */
+.text-gradient-brand {
+  background-image: linear-gradient(
+    100deg,
+    var(--lime) 0%,
+    oklch(0.6 0.2 80) 45%,
+    var(--cobalt) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Lime-soft surface for cards sitting on the gradient background */
+.surface-card {
+  background: oklch(1 0 0 / 0.72);
+  backdrop-filter: blur(6px);
 }

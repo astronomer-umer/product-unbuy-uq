@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { buildSemanticIndex } from "@/lib/semantic-search";
 
 export type ProductStatus = "AVAILABLE" | "RESERVED" | "SOLD";
 
@@ -89,11 +90,6 @@ function rowToProduct(row: ProductRow | null | undefined): Product | null {
 
 // ---------- sellers ----------
 
-export async function getAllSellers(): Promise<Seller[]> {
-  const rows = await prisma.seller.findMany({ orderBy: { joinedAt: "asc" } });
-  return rows.map(rowToSeller).filter((s): s is Seller => s !== null);
-}
-
 export async function getActiveSellers(): Promise<Seller[]> {
   const rows = await prisma.seller.findMany({
     where: { active: true },
@@ -172,12 +168,6 @@ function asArray(v: string | string[] | undefined): string[] {
 export async function searchProducts(
   params: SearchParams,
 ): Promise<ProductWithSeller[]> {
-  const q = (params.q ?? "").trim();
-  const brands = asArray(params.brand);
-  const sizes = asArray(params.size);
-  const conditions = asArray(params.condition);
-
-  // Resolve seller slug → id if provided
   let sellerId: string | undefined;
   if (params.seller) {
     const s = await prisma.seller.findUnique({ where: { slug: params.seller } });
@@ -185,33 +175,25 @@ export async function searchProducts(
     if (!sellerId) return [];
   }
 
-  const rows = await prisma.product.findMany({
-    where: {
-      AND: [
-        sellerId ? { sellerId } : {},
-        brands.length > 0 ? { brand: { in: brands } } : {},
-        sizes.length > 0 ? { size: { in: sizes } } : {},
-        conditions.length > 0 ? { condition: { in: conditions } } : {},
-        params.status === "AVAILABLE" || params.status === "SOLD" || params.status === "RESERVED"
-          ? { status: params.status }
-          : {},
-        q
-          ? {
-              OR: [
-                { title: { contains: q } },
-                { description: { contains: q } },
-                { brand: { contains: q } },
-                { category: { contains: q } },
-              ],
-            }
-          : {},
-      ],
-    },
+  const baseWhere = {
+    AND: [
+      sellerId ? { sellerId } : {},
+      asArray(params.brand).length > 0 ? { brand: { in: asArray(params.brand) } } : {},
+      asArray(params.size).length > 0 ? { size: { in: asArray(params.size) } } : {},
+      asArray(params.condition).length > 0 ? { condition: { in: asArray(params.condition) } } : {},
+      params.status === "AVAILABLE" || params.status === "SOLD" || params.status === "RESERVED"
+        ? { status: params.status }
+        : {},
+    ],
+  };
+
+  const allMatching = await prisma.product.findMany({
+    where: baseWhere,
     include: { images: true, seller: true },
-    orderBy: { createdAt: "desc" },
+    take: 500,
   });
 
-  return rows
+  const products = allMatching
     .map((r) => {
       const p = rowToProduct(r);
       const s = rowToSeller(r.seller);
@@ -219,6 +201,24 @@ export async function searchProducts(
       return { ...p, seller: s };
     })
     .filter((x): x is ProductWithSeller => x !== null);
+
+  const q = (params.q ?? "").trim();
+  if (q.length < 2) {
+    return products.sort(
+      (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+    );
+  }
+
+  // Semantic re-rank on the filtered set
+  const index = buildSemanticIndex(
+    products,
+    (p: ProductWithSeller) =>
+      [p.title, p.description, p.brand ?? "", p.category, p.condition, p.color ?? "", p.size ?? ""].join(
+        " ",
+      ),
+  );
+  const ranked = index.query(q);
+  return ranked.map((r) => r.item);
 }
 
 // ---------- formatting ----------

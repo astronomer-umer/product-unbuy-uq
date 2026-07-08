@@ -19,7 +19,7 @@ export function ProductCard({
       className="group block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       aria-label={`${product.title} — ${formatPrice(product.price, product.currency)}`}
     >
-      <Card className="h-full overflow-hidden border-transparent transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-border group-hover:shadow-md">
+      <Card className="h-full overflow-hidden border-border/60 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-lime/40 group-hover:shadow-md">
         <div className="relative aspect-square w-full overflow-hidden bg-muted">
           {cover && (
             /* eslint-disable-next-line @next/next/no-img-element */
@@ -31,7 +31,7 @@ export function ProductCard({
             />
           )}
           {isSold && (
-            <div className="absolute inset-0 flex items-center justify-center bg-foreground/40">
+            <div className="absolute inset-0 flex items-center justify-center bg-foreground/45">
               <Badge variant="destructive" className="text-xs">Sold</Badge>
             </div>
           )}
@@ -55,8 +55,10 @@ export function ProductCard({
           </span>
         </CardContent>
         {seller && (
-          <div className="border-t px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-            <span className="text-cobalt">{seller.name}</span>
+          <div className="border-t border-border/60 px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+            <span className="text-lime/80 group-hover:text-lime transition-colors">
+              {seller.name}
+            </span>
           </div>
         )}
       </Card>

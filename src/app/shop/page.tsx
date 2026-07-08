@@ -40,7 +40,7 @@ export default async function ShopPage({
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
       <div className="mb-10">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-cobalt">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
           Catalog
         </p>
         <h1 className="mt-3 font-heading text-5xl tracking-wide uppercase sm:text-6xl">

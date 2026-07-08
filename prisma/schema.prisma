@@ -97,7 +97,8 @@ model Product {
   sellerId String
   seller   Seller  @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 
-  images ProductImage[]
+  images    ProductImage[]
+  embedding String?        // JSON-encoded 384-dim vector for semantic search
 }
 
 model ProductImage {

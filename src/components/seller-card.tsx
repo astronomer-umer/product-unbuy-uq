@@ -9,8 +9,8 @@ export function SellerCard({ seller }: { seller: Seller }) {
       href={`/sellers/${seller.slug}`}
       className="group block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
-      <Card className="h-full overflow-hidden border-transparent transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-border group-hover:shadow-md">
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-cobalt">
+      <Card className="h-full overflow-hidden border-border/60 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-lime/40 group-hover:shadow-md">
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-foreground">
           {seller.bannerUrl ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -19,8 +19,8 @@ export function SellerCard({ seller }: { seller: Seller }) {
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="font-heading text-7xl text-white/90 tracking-tight">
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-lime/20 via-foreground to-foreground">
+              <span className="font-heading text-8xl text-lime/80 tracking-tight">
                 {initial}
               </span>
             </div>
@@ -46,8 +46,8 @@ export function SellerCard({ seller }: { seller: Seller }) {
             </p>
           )}
           <div className="mt-3 flex items-center justify-between font-mono text-xs uppercase tracking-wider">
-            <span className="text-cobalt">{seller.category}</span>
-            <span className="text-muted-foreground">View shop →</span>
+            <span className="text-foreground/60">{seller.category}</span>
+            <span className="text-lime">View shop →</span>
           </div>
         </CardContent>
       </Card>

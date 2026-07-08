@@ -59,7 +59,10 @@ export default async function ProductPage({
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
-      <nav className="mb-6 font-mono text-xs uppercase tracking-wider text-muted-foreground" aria-label="Breadcrumb">
+      <nav
+        className="mb-6 font-mono text-xs uppercase tracking-wider text-muted-foreground"
+        aria-label="Breadcrumb"
+      >
         <Link href="/shop" className="hover:text-foreground transition-colors">
           ← Back to shop
         </Link>
@@ -83,9 +86,13 @@ export default async function ProductPage({
           ))}
         </div>
 
-        <div className="lg:sticky lg:top-20 lg:self-start">
+        <div className="lg:sticky lg:top-24 lg:self-start">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            {product.featured && <Badge className="bg-lime text-foreground hover:bg-lime/90">Featured</Badge>}
+            {product.featured && (
+              <Badge className="bg-lime text-foreground hover:bg-lime/90">
+                Featured
+              </Badge>
+            )}
             {isSold && <Badge variant="destructive">Sold</Badge>}
             <Badge variant="outline">{product.condition}</Badge>
           </div>
@@ -129,34 +136,35 @@ export default async function ProductPage({
 
           <Separator className="my-6" />
 
-          <div className="rounded-lg border border-border p-4">
-            <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-              Sold by
-            </p>
-            <Link
-              href={`/sellers/${seller.slug}`}
-              className="mt-1 flex items-center justify-between"
-            >
-              <div>
-                <div className="font-heading text-xl tracking-wide uppercase">
-                  {seller.name}
-                </div>
-                {seller.handle && (
-                  <div className="mt-0.5 font-mono text-xs text-muted-foreground">
-                    @{seller.handle}
-                  </div>
-                )}
+          <Link
+            href={`/sellers/${seller.slug}`}
+            className="group flex items-center gap-3 rounded-xl border border-border/60 p-3 transition-colors hover:border-lime/40 hover:bg-lime/5"
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-lime/30 to-foreground font-heading text-lg text-background">
+              {seller.name.slice(0, 1)}
+            </div>
+            <div className="flex-1">
+              <div className="font-heading text-base tracking-wide uppercase">
+                {seller.name}
               </div>
-              <span className="font-mono text-xs uppercase tracking-wider text-cobalt">
-                Visit shop →
-              </span>
-            </Link>
-          </div>
+              {seller.handle && (
+                <div className="font-mono text-xs text-muted-foreground">
+                  @{seller.handle}
+                </div>
+              )}
+            </div>
+            <span className="font-mono text-xs uppercase tracking-wider text-lime transition-colors group-hover:text-foreground">
+              Shop →
+            </span>
+          </Link>
 
           {isSold ? (
             <div className="mt-6 rounded-lg bg-muted p-4 text-sm text-muted-foreground">
               This item has been sold. Browse the rest of {seller.name}&apos;s{" "}
-              <Link href={`/sellers/${seller.slug}`} className="text-cobalt underline-offset-4 hover:underline">
+              <Link
+                href={`/sellers/${seller.slug}`}
+                className="text-lime underline-offset-4 hover:underline"
+              >
                 shop
               </Link>
               .
@@ -167,7 +175,7 @@ export default async function ProductPage({
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-cobalt px-4 text-sm font-medium text-white hover:bg-cobalt/90 transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-lime px-4 text-sm font-medium text-foreground shadow-sm shadow-lime/20 hover:bg-lime/90 transition-colors"
               >
                 Message on WhatsApp
               </a>
@@ -175,7 +183,7 @@ export default async function ProductPage({
                 href={dm}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-lg border border-border bg-background px-4 text-sm font-medium hover:bg-muted transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full border border-border bg-background px-4 text-sm font-medium hover:bg-muted transition-colors"
               >
                 DM on Instagram
               </a>

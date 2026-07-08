@@ -40,7 +40,7 @@ export default function OnboardPage() {
           </ul>
         </div>
 
-        <div className="rounded-xl border border-cobalt bg-cobalt/5 p-6">
+        <div className="rounded-xl border border-lime bg-lime/5 p-6">
           <h2 className="font-heading text-2xl tracking-wide uppercase">
             Ready?
           </h2>
@@ -48,7 +48,7 @@ export default function OnboardPage() {
             Email{" "}
             <a
               href="mailto:sellers@unbuy.pk"
-              className="text-cobalt underline-offset-4 hover:underline"
+              className="text-lime underline-offset-4 hover:underline"
             >
               sellers@unbuy.pk
             </a>{" "}

@@ -115,7 +115,7 @@ export function ShopFilters({ facets }: { facets: Facets }) {
                   <span className="font-medium">{s.name}</span>
                   <span
                     className={`font-mono text-xs uppercase tracking-wider ${
-                      active ? "opacity-80" : "text-cobalt"
+                      active ? "opacity-80" : "text-lime"
                     }`}
                   >
                     {s.category}

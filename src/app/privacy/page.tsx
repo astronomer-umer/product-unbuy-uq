@@ -6,7 +6,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <main className="mx-auto w-full max-w-3xl px-6 py-16">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-cobalt">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
         Legal
       </p>
       <h1 className="mt-3 font-heading text-5xl tracking-wide uppercase sm:text-6xl">
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
             emailing{" "}
             <a
               href="mailto:hello@unbuy.pk"
-              className="text-cobalt underline-offset-4 hover:underline"
+              className="text-lime underline-offset-4 hover:underline"
             >
               hello@unbuy.pk
             </a>

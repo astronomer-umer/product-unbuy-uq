@@ -22,7 +22,7 @@ export default async function AdminPage() {
       <section>
         <div className="mb-4 flex items-end justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-cobalt">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
               Roster
             </p>
             <h2 className="mt-1 font-heading text-2xl tracking-wide uppercase">
@@ -60,7 +60,7 @@ export default async function AdminPage() {
                   <p className="text-xs text-muted-foreground line-clamp-2">{s.bio}</p>
                 )}
                 <div className="flex items-center justify-between font-mono text-xs uppercase tracking-wider">
-                  <span className="text-cobalt">{s.category}</span>
+                  <span className="text-lime">{s.category}</span>
                   <Link
                     href={`/sellers/${s.slug}`}
                     className="text-muted-foreground hover:text-foreground transition-colors"
@@ -82,7 +82,7 @@ export default async function AdminPage() {
           </h2>
           <Link
             href="/admin/products/new"
-            className="inline-flex h-8 items-center rounded-lg bg-cobalt px-3 text-sm font-medium text-white hover:bg-cobalt/90 transition-colors"
+            className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
           >
             + Add product
           </Link>
@@ -119,7 +119,7 @@ export default async function AdminPage() {
                       )}
                     </td>
                     <td className="px-3 py-2 font-medium">{p.title}</td>
-                    <td className="px-3 py-2 text-cobalt font-medium">
+                    <td className="px-3 py-2 text-lime font-medium">
                       {p.seller.name}
                     </td>
                     <td className="px-3 py-2 font-mono tabular-nums">
