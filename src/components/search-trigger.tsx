@@ -184,7 +184,7 @@ function SearchModal({ onClose }: { onClose: () => void }) {
                     className="flex w-full items-center justify-between gap-4 px-5 py-3 text-left transition-colors hover:bg-foreground/[0.03]"
                   >
                     <div>
-                      <div className="font-medium">{s.title}</div>
+                      <div className="font-semibold">{s.title}</div>
                       <div className="font-mono text-xs text-muted-foreground">
                         {s.seller}
                       </div>
@@ -200,7 +200,7 @@ function SearchModal({ onClose }: { onClose: () => void }) {
               <button
                 type="button"
                 onClick={() => goToSearch(q)}
-                className="mt-4 inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
+                className="mt-4 inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground hover:bg-lime/90 transition-colors"
               >
                 See all results for &ldquo;{q}&rdquo; →
               </button>

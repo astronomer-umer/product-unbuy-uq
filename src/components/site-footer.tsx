@@ -6,7 +6,7 @@ export async function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t border-border/60 bg-foreground text-background">
+    <footer className="mt-auto border-t border-border/60 surface-cobalt">
       <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
           {/* Brand block */}
@@ -19,7 +19,7 @@ export async function SiteFooter() {
                 preloved
               </span>
             </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed opacity-80">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed opacity-85">
               A curated marketplace for preloved goods. Real sellers, real
               photos, no noise. Buyers tap, sellers reply, things find new
               homes.
@@ -37,7 +37,7 @@ export async function SiteFooter() {
               />
               <button
                 type="submit"
-                className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
+                className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground hover:bg-lime/90 transition-colors"
               >
                 Get drops
               </button>
@@ -54,17 +54,17 @@ export async function SiteFooter() {
             </h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <Link href="/shop" className="opacity-80 hover:opacity-100 transition-opacity">
+                <Link href="/shop" className="opacity-85 hover:opacity-100 transition-opacity">
                   All listings
                 </Link>
               </li>
               <li>
-                <Link href="/shop?status=AVAILABLE" className="opacity-80 hover:opacity-100 transition-opacity">
+                <Link href="/shop?status=AVAILABLE" className="opacity-85 hover:opacity-100 transition-opacity">
                   Available now
                 </Link>
               </li>
               <li>
-                <Link href="/sellers" className="opacity-80 hover:opacity-100 transition-opacity">
+                <Link href="/sellers" className="opacity-85 hover:opacity-100 transition-opacity">
                   Sellers
                 </Link>
               </li>
@@ -80,7 +80,7 @@ export async function SiteFooter() {
               <li>
                 <Link
                   href="/sellers/onboard"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="opacity-85 hover:opacity-100 transition-opacity"
                 >
                   Apply to join
                 </Link>
@@ -88,7 +88,7 @@ export async function SiteFooter() {
               <li>
                 <Link
                   href="/admin"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="opacity-85 hover:opacity-100 transition-opacity"
                 >
                   Seller login
                 </Link>
@@ -97,7 +97,7 @@ export async function SiteFooter() {
                 <li key={s.id}>
                   <Link
                     href={`/sellers/${s.slug}`}
-                    className="opacity-80 hover:opacity-100 transition-opacity"
+                    className="opacity-85 hover:opacity-100 transition-opacity"
                   >
                     {s.name}
                   </Link>
@@ -115,7 +115,7 @@ export async function SiteFooter() {
               <li>
                 <Link
                   href="/about"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="opacity-85 hover:opacity-100 transition-opacity"
                 >
                   About
                 </Link>
@@ -123,7 +123,7 @@ export async function SiteFooter() {
               <li>
                 <Link
                   href="/privacy"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="opacity-85 hover:opacity-100 transition-opacity"
                 >
                   Privacy
                 </Link>
@@ -131,7 +131,7 @@ export async function SiteFooter() {
               <li>
                 <Link
                   href="/terms"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="opacity-85 hover:opacity-100 transition-opacity"
                 >
                   Terms
                 </Link>
@@ -139,7 +139,7 @@ export async function SiteFooter() {
               <li>
                 <a
                   href="mailto:hello@unbuy.pk"
-                  className="opacity-80 hover:opacity-100 transition-opacity"
+                  className="opacity-85 hover:opacity-100 transition-opacity"
                 >
                   hello@unbuy.pk
                 </a>

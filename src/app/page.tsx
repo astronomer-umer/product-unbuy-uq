@@ -17,13 +17,14 @@ export default async function HomePage() {
     <main>
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border/60">
-        <div className="absolute inset-0 -z-10 opacity-60">
+        {/* Balanced halos — lime + cobalt, equal weight */}
+        <div className="absolute inset-0 -z-10 opacity-70" aria-hidden="true">
           <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-lime/30 blur-3xl" />
-          <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-lime/20 blur-3xl" />
+          <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-cobalt/20 blur-3xl" />
         </div>
 
         <div className="mx-auto max-w-6xl px-6 pt-20 pb-24 sm:pt-28 sm:pb-32">
-          <div className="inline-flex items-center gap-2 rounded-full border border-lime/40 bg-lime/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-lime">
+          <div className="inline-flex items-center gap-2 rounded-full border border-lime/40 bg-lime/15 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-lime">
             <span className="h-1.5 w-1.5 rounded-full bg-lime" />
             Preloved · Pakistan · Always
           </div>
@@ -42,13 +43,13 @@ export default async function HomePage() {
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link
               href="/shop"
-              className="inline-flex h-11 items-center rounded-full bg-lime px-6 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors shadow-sm shadow-lime/30"
+              className="inline-flex h-11 items-center rounded-full bg-lime px-6 text-sm font-semibold text-foreground hover:bg-lime/90 transition-colors shadow-sm shadow-lime/30"
             >
               Browse the catalog →
             </Link>
             <Link
               href="/sellers"
-              className="inline-flex h-11 items-center rounded-full border border-border bg-background px-6 text-sm font-medium hover:bg-muted transition-colors"
+              className="inline-flex h-11 items-center rounded-full border border-border bg-background px-6 text-sm font-semibold hover:bg-muted transition-colors"
             >
               Meet the sellers
             </Link>
@@ -68,7 +69,7 @@ export default async function HomePage() {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-cobalt">
                   This week
                 </p>
                 <h2 className="mt-2 font-heading text-4xl tracking-wide uppercase sm:text-5xl">
@@ -101,7 +102,7 @@ export default async function HomePage() {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.2em] text-lime">
+                <p className="font-mono text-xs uppercase tracking-[0.2em] text-cobalt">
                   The roster
                 </p>
                 <h2 className="mt-2 font-heading text-4xl tracking-wide uppercase sm:text-5xl">
@@ -124,10 +125,10 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* MANIFESTO STRIP — lime background, ink text */}
-      <section className="border-y border-foreground/20 bg-lime text-foreground">
+      {/* MANIFESTO — dark cobalt bg + lime accents */}
+      <section className="surface-cobalt">
         <div className="mx-auto max-w-6xl px-6 py-20">
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-foreground/70">
+          <p className="font-mono text-xs uppercase tracking-[0.25em] text-lime">
             What unbuy is
           </p>
           <div className="mt-8 grid gap-10 md:grid-cols-3">
@@ -179,7 +180,7 @@ function Pillar({ title, body }: { title: string; body: string }) {
   return (
     <div>
       <h3 className="font-heading text-2xl tracking-wide uppercase">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-foreground/85">{body}</p>
+      <p className="mt-2 text-sm leading-relaxed opacity-90">{body}</p>
     </div>
   );
 }

@@ -175,7 +175,7 @@ export default async function ProductPage({
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-lime px-4 text-sm font-medium text-foreground shadow-sm shadow-lime/20 hover:bg-lime/90 transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground shadow-sm shadow-lime/20 hover:bg-lime/90 transition-colors"
               >
                 Message on WhatsApp
               </a>
@@ -183,7 +183,7 @@ export default async function ProductPage({
                 href={dm}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-full border border-border bg-background px-4 text-sm font-medium hover:bg-muted transition-colors"
+                className="inline-flex h-11 w-full items-center justify-center rounded-full border border-border bg-background px-4 text-sm font-semibold hover:bg-muted transition-colors"
               >
                 DM on Instagram
               </a>

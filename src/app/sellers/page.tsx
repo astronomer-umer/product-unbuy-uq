@@ -28,7 +28,7 @@ export default async function SellersPage() {
           </p>
           <Link
             href="/sellers/onboard"
-            className="mt-4 inline-flex h-9 items-center rounded-lg bg-lime px-4 text-sm font-medium text-white hover:bg-lime/90 transition-colors"
+            className="mt-4 inline-flex h-9 items-center rounded-lg bg-lime px-4 text-sm font-semibold text-white hover:bg-lime/90 transition-colors"
           >
             Apply to join
           </Link>

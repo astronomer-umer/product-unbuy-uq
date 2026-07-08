@@ -15,13 +15,13 @@ export default function ProductNotFound() {
       <div className="mt-8 flex gap-2">
         <Link
           href="/shop"
-          className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+          className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
         >
           Browse shop
         </Link>
         <Link
           href="/"
-          className="inline-flex h-9 items-center rounded-lg border border-border bg-background px-4 text-sm font-medium hover:bg-muted transition-colors"
+          className="inline-flex h-9 items-center rounded-lg border border-border bg-background px-4 text-sm font-semibold hover:bg-muted transition-colors"
         >
           Home
         </Link>

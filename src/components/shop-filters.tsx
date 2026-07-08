@@ -112,7 +112,7 @@ export function ShopFilters({ facets }: { facets: Facets }) {
                       : "border-border bg-background hover:bg-muted"
                   }`}
                 >
-                  <span className="font-medium">{s.name}</span>
+                  <span className="font-semibold">{s.name}</span>
                   <span
                     className={`font-mono text-xs uppercase tracking-wider ${
                       active ? "opacity-80" : "text-lime"

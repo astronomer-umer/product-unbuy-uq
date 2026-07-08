@@ -82,7 +82,7 @@ export default async function AdminPage() {
           </h2>
           <Link
             href="/admin/products/new"
-            className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
+            className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground hover:bg-lime/90 transition-colors"
           >
             + Add product
           </Link>
@@ -118,8 +118,8 @@ export default async function AdminPage() {
                         />
                       )}
                     </td>
-                    <td className="px-3 py-2 font-medium">{p.title}</td>
-                    <td className="px-3 py-2 text-lime font-medium">
+                    <td className="px-3 py-2 font-semibold">{p.title}</td>
+                    <td className="px-3 py-2 text-lime font-semibold">
                       {p.seller.name}
                     </td>
                     <td className="px-3 py-2 font-mono tabular-nums">
@@ -143,7 +143,7 @@ export default async function AdminPage() {
                         <SoldToggle id={p.id} status={p.status} />
                         <Link
                           href={`/admin/products/${p.id}`}
-                          className="inline-flex h-6 items-center rounded-md border border-border bg-background px-2 text-xs font-medium hover:bg-muted transition-colors"
+                          className="inline-flex h-6 items-center rounded-md border border-border bg-background px-2 text-xs font-semibold hover:bg-muted transition-colors"
                         >
                           Edit
                         </Link>

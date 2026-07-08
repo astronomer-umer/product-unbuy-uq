@@ -19,8 +19,8 @@ export function SellerCard({ seller }: { seller: Seller }) {
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-lime/20 via-foreground to-foreground">
-              <span className="font-heading text-8xl text-lime/80 tracking-tight">
+            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-lime/25 via-cobalt to-cobalt">
+              <span className="font-heading text-8xl text-lime tracking-tight">
                 {initial}
               </span>
             </div>

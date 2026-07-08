@@ -29,10 +29,10 @@ export default async function SellerPage({
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
-      {/* Brand header */}
-      <section className="mb-12 overflow-hidden rounded-3xl bg-foreground text-background">
-        <div className="absolute inset-0 -z-10 opacity-50" aria-hidden="true">
-          <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-lime/30 blur-3xl" />
+      {/* Brand header — dark cobalt background */}
+      <section className="mb-12 overflow-hidden rounded-3xl surface-cobalt relative">
+        <div className="absolute inset-0 -z-10 opacity-40" aria-hidden="true">
+          <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-lime/20 blur-3xl" />
         </div>
         <div className="relative grid gap-6 p-8 sm:p-12 md:grid-cols-[1fr_auto] md:items-end">
           <div>
@@ -43,12 +43,12 @@ export default async function SellerPage({
               {seller.name}
             </h1>
             {seller.handle && (
-              <p className="mt-2 font-mono text-sm opacity-90">
+              <p className="mt-2 font-mono text-sm opacity-85">
                 @{seller.handle}
               </p>
             )}
             {seller.bio && (
-              <p className="mt-5 max-w-xl text-sm leading-relaxed opacity-90">
+              <p className="mt-5 max-w-xl text-sm leading-relaxed opacity-85">
                 {seller.bio}
               </p>
             )}
@@ -59,7 +59,7 @@ export default async function SellerPage({
                 href={seller.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-9 items-center rounded-full border border-background/30 bg-transparent px-4 text-sm font-medium hover:bg-background/10 transition-colors"
+                className="inline-flex h-10 items-center rounded-full border border-background/30 bg-transparent px-4 text-sm font-semibold hover:bg-background/10 transition-colors"
               >
                 Instagram
               </a>
@@ -68,7 +68,7 @@ export default async function SellerPage({
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-sm font-medium text-foreground hover:bg-lime/90 transition-colors"
+              className="inline-flex h-10 items-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground hover:bg-lime/90 transition-colors shadow-sm shadow-lime/20"
             >
               WhatsApp
             </a>

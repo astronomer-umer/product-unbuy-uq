@@ -36,7 +36,7 @@ export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
             <>
               <Link
                 href="/admin"
-                className="ml-1 inline-flex h-9 items-center rounded-full bg-foreground px-4 text-xs font-medium text-background hover:bg-foreground/90 transition-colors"
+                className="ml-1 inline-flex h-9 items-center rounded-full bg-foreground px-4 text-xs font-semibold text-background hover:bg-foreground/90 transition-colors"
               >
                 Admin
               </Link>
@@ -57,7 +57,7 @@ export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
           ) : (
             <Link
               href="/login"
-              className="ml-1 inline-flex h-9 items-center rounded-full border border-border bg-background px-4 text-xs font-medium hover:bg-muted transition-colors"
+              className="ml-1 inline-flex h-9 items-center rounded-full border border-border bg-background px-4 text-xs font-semibold hover:bg-muted transition-colors"
             >
               Sign in
             </Link>
@@ -86,7 +86,7 @@ export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
             ))}
             <Link
               href="/sellers/onboard"
-              className="ml-auto whitespace-nowrap rounded-full bg-lime/10 px-3 py-1 text-xs font-medium text-lime hover:bg-lime hover:text-foreground transition-colors"
+              className="ml-auto whitespace-nowrap rounded-full bg-lime/10 px-3 py-1 text-xs font-semibold text-lime hover:bg-lime hover:text-foreground transition-colors"
             >
               + Apply
             </Link>
@@ -101,7 +101,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <Link
       href={href}
-      className="inline-flex h-9 items-center rounded-full px-3 text-sm font-medium text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      className="inline-flex h-9 items-center rounded-full px-3 text-sm font-semibold text-foreground/70 hover:text-foreground hover:bg-foreground/5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
     >
       {children}
     </Link>
