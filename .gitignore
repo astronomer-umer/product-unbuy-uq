@@ -50,4 +50,12 @@ dev.db
 dev.db-journal
 *.db
 *.db-journal
+
+# Public/uploads: keep IG-imported product images, ignore runtime uploads
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/*.jpg
+!public/uploads/*.png
+!public/uploads/*.webp
+!public/uploads/*.gif
 .vercel
