@@ -16,9 +16,12 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  seller   Seller?
+  accounts       Account[]
+  sessions       Session[]
+  seller         Seller?
+  buyerConvos    Conversation[] @relation("BuyerConversations")
+  sentMessages   Message[]
+  notifications  Notification[]
 }
 
 model Account {
@@ -75,7 +78,8 @@ model Seller {
   ownerId String  @unique
   owner   User    @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  products Product[]
+  products      Product[]
+  conversations Conversation[]
 }
 
 model Product {
@@ -97,8 +101,8 @@ model Product {
   sellerId String
   seller   Seller  @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 
-  images    ProductImage[]
-  embedding String?        // JSON-encoded 384-dim vector for semantic search
+  images        ProductImage[]
+  conversations Conversation[]
 }
 
 model ProductImage {
@@ -109,4 +113,52 @@ model ProductImage {
   productId String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+}
+
+// One conversation per (buyer, seller, product). Triple-key uniqueness.
+model Conversation {
+  id        String   @id @default(cuid())
+  buyerId   String
+  sellerId  String
+  productId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  buyer    User    @relation("BuyerConversations", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller   Seller  @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  product  Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  messages Message[]
+
+  @@unique([buyerId, sellerId, productId])
+  @@index([buyerId])
+  @@index([sellerId])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  senderId       String
+  body           String
+  read           Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String   // "message" | "system"
+  title     String
+  body      String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
 }

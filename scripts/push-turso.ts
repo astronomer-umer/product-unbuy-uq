@@ -11,6 +11,10 @@ async function main() {
   const p = new PrismaClient({ adapter });
 
   const stmts = [
+    // Drop in reverse-dependency order
+    `DROP TABLE IF EXISTS "Notification"`,
+    `DROP TABLE IF EXISTS "Message"`,
+    `DROP TABLE IF EXISTS "Conversation"`,
     `DROP TABLE IF EXISTS "ProductImage"`,
     `DROP TABLE IF EXISTS "Product"`,
     `DROP TABLE IF EXISTS "Seller"`,
@@ -19,6 +23,7 @@ async function main() {
     `DROP TABLE IF EXISTS "VerificationToken"`,
     `DROP TABLE IF EXISTS "User"`,
 
+    // Auth.js standard tables
     `CREATE TABLE "User" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "name" TEXT,
@@ -65,6 +70,7 @@ async function main() {
     `CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token")`,
     `CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token")`,
 
+    // Seller
     `CREATE TABLE "Seller" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "slug" TEXT NOT NULL,
@@ -86,6 +92,7 @@ async function main() {
     `CREATE UNIQUE INDEX "Seller_slug_key" ON "Seller"("slug")`,
     `CREATE UNIQUE INDEX "Seller_ownerId_key" ON "Seller"("ownerId")`,
 
+    // Product
     `CREATE TABLE "Product" (
       "id" TEXT NOT NULL PRIMARY KEY,
       "title" TEXT NOT NULL,
@@ -114,6 +121,49 @@ async function main() {
       "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
       CONSTRAINT "ProductImage_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE CASCADE
     )`,
+
+    // Conversation (1:1 per buyer+seller+product)
+    `CREATE TABLE "Conversation" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "buyerId" TEXT NOT NULL,
+      "sellerId" TEXT NOT NULL,
+      "productId" TEXT NOT NULL,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      "updatedAt" DATETIME NOT NULL,
+      CONSTRAINT "Conversation_buyerId_fkey" FOREIGN KEY ("buyerId") REFERENCES "User" ("id") ON DELETE CASCADE,
+      CONSTRAINT "Conversation_sellerId_fkey" FOREIGN KEY ("sellerId") REFERENCES "Seller" ("id") ON DELETE CASCADE,
+      CONSTRAINT "Conversation_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product" ("id") ON DELETE CASCADE
+    )`,
+    `CREATE UNIQUE INDEX "Conversation_buyerId_sellerId_productId_key" ON "Conversation"("buyerId","sellerId","productId")`,
+    `CREATE INDEX "Conversation_buyerId_idx" ON "Conversation"("buyerId")`,
+    `CREATE INDEX "Conversation_sellerId_idx" ON "Conversation"("sellerId")`,
+
+    // Message
+    `CREATE TABLE "Message" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "conversationId" TEXT NOT NULL,
+      "senderId" TEXT NOT NULL,
+      "body" TEXT NOT NULL,
+      "read" BOOLEAN NOT NULL DEFAULT 0,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT "Message_conversationId_fkey" FOREIGN KEY ("conversationId") REFERENCES "Conversation" ("id") ON DELETE CASCADE,
+      CONSTRAINT "Message_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User" ("id") ON DELETE CASCADE
+    )`,
+    `CREATE INDEX "Message_conversationId_createdAt_idx" ON "Message"("conversationId","createdAt")`,
+
+    // Notification
+    `CREATE TABLE "Notification" (
+      "id" TEXT NOT NULL PRIMARY KEY,
+      "userId" TEXT NOT NULL,
+      "kind" TEXT NOT NULL,
+      "title" TEXT NOT NULL,
+      "body" TEXT NOT NULL,
+      "link" TEXT,
+      "read" BOOLEAN NOT NULL DEFAULT 0,
+      "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE
+    )`,
+    `CREATE INDEX "Notification_userId_read_createdAt_idx" ON "Notification"("userId","read","createdAt")`,
   ];
 
   for (const sql of stmts) {

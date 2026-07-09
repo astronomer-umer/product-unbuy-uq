@@ -6,9 +6,11 @@ import {
   formatPrice,
   getProduct,
   getSeller,
-  instagramDmLink,
-  whatsappLink,
 } from "@/lib/catalog";
+import { auth } from "@/auth";
+import { startConversation } from "@/app/actions/messages";
+import { redirect } from "next/navigation";
+import { prisma } from "@/lib/db";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -51,11 +53,24 @@ export default async function ProductPage({
   if (!seller) notFound();
 
   const isSold = product.status === "SOLD";
-  const message = `Hi! I'm interested in "${product.title}" — ${formatPrice(product.price, product.currency)} on unbuy. Is it still available?`;
-  const wa = whatsappLink(seller.whatsappE164, message);
-  const dm = seller.handle
-    ? instagramDmLink(seller.handle, message)
-    : seller.instagramUrl ?? "#";
+
+  async function startChat() {
+    "use server";
+    const session = await auth();
+    if (!session?.user?.id) {
+      redirect(`/login?next=/products/${product!.id}&intent=message`);
+    }
+    // Sellers can't message themselves — send them to their own inbox.
+    const isOwnProduct = await prisma.seller.findFirst({
+      where: { id: product!.sellerId, ownerId: session.user.id },
+      select: { id: true },
+    });
+    if (isOwnProduct) {
+      redirect("/admin/messages");
+    }
+    const r = await startConversation(product!.id);
+    redirect(r.redirect);
+  }
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -170,28 +185,18 @@ export default async function ProductPage({
               .
             </div>
           ) : (
-            <div className="mt-6 grid gap-2">
-              <a
-                href={wa}
-                target="_blank"
-                rel="noopener noreferrer"
+            <form action={startChat} className="mt-6 grid gap-2">
+              <button
+                type="submit"
                 className="inline-flex h-11 w-full items-center justify-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground shadow-sm shadow-lime/20 hover:bg-lime/90 transition-colors"
               >
-                Message on WhatsApp
-              </a>
-              <a
-                href={dm}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-11 w-full items-center justify-center rounded-full border border-border bg-background px-4 text-sm font-semibold hover:bg-muted transition-colors"
-              >
-                DM on Instagram
-              </a>
+                Message {seller.name}
+              </button>
               <p className="mt-2 text-xs text-muted-foreground">
-                Both open a chat pre-filled with the product name and price.
-                You&apos;ll be talking to {seller.name} directly.
+                You&apos;ll be chatting with {seller.name} here, on unbuy. No
+                WhatsApp, no DM, no switching apps.
               </p>
-            </div>
+            </form>
           )}
         </div>
       </div>

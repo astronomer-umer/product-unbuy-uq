@@ -1,10 +1,30 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
 import { getActiveSellers, type Seller } from "@/lib/catalog";
+import { prisma } from "@/lib/db";
 import { SearchTrigger } from "./search-trigger";
+import { NotificationBell } from "./notification-bell";
 
 export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
   const session = await auth();
+
+  let inboxLink: { href: string; label: string; unread: number } | null = null;
+  if (session?.user?.id) {
+    const sellerLink = await prisma.seller.findUnique({
+      where: { ownerId: session.user.id },
+      select: { id: true },
+    });
+    const unread = await prisma.notification.count({
+      where: { userId: session.user.id, read: false },
+    });
+    if (sellerLink) {
+      inboxLink = { href: "/admin/messages", label: "Inbox", unread };
+    } else {
+      inboxLink = { href: "/messages", label: "Messages", unread };
+    }
+  }
+
+  const isSeller = inboxLink?.href === "/admin/messages";
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/50">
@@ -32,13 +52,20 @@ export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
 
         <div className="flex items-center gap-1">
           <SearchTrigger />
+          {session?.user && inboxLink && (
+            <NotificationBell
+              href={inboxLink.href}
+              label={inboxLink.label}
+              unread={inboxLink.unread}
+            />
+          )}
           {session?.user ? (
             <>
               <Link
                 href="/admin"
                 className="ml-1 inline-flex h-9 items-center rounded-full bg-foreground px-4 text-xs font-semibold text-background hover:bg-foreground/90 transition-colors"
               >
-                Admin
+                {isSeller ? "Admin" : "Profile"}
               </Link>
               <form
                 action={async () => {
