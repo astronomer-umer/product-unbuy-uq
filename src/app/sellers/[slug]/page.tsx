@@ -5,8 +5,6 @@ import {
   formatPrice,
   getProducts,
   getSellerBySlug,
-  instagramDmLink,
-  whatsappLink,
 } from "@/lib/catalog";
 
 export default async function SellerPage({
@@ -21,11 +19,6 @@ export default async function SellerPage({
   const products = await getProducts({ sellerId: seller.id });
   const available = products.filter((p) => p.status !== "SOLD");
   const sold = products.filter((p) => p.status === "SOLD");
-  const msg = `Hi! I'd like to know more about your shop.`;
-  const wa = whatsappLink(seller.whatsappE164, msg);
-  const dm = seller.handle
-    ? instagramDmLink(seller.handle, msg)
-    : seller.instagramUrl ?? "#";
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-16">
@@ -65,12 +58,10 @@ export default async function SellerPage({
               </a>
             )}
             <a
-              href={wa}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={`/shop?seller=${seller.slug}`}
               className="inline-flex h-10 items-center rounded-full bg-lime px-4 text-sm font-semibold text-foreground hover:bg-lime/90 transition-colors shadow-sm shadow-lime/20"
             >
-              WhatsApp
+              Browse listings
             </a>
           </div>
         </div>
@@ -94,7 +85,8 @@ export default async function SellerPage({
         {available.length === 0 ? (
           <div className="rounded-lg border border-dashed border-border p-8 text-center">
             <p className="text-sm text-muted-foreground">
-              Nothing available right now. Check back, or message them on WhatsApp.
+              Nothing available right now. Sellers add items on their own schedule —
+              sign up to get a notification when this shop restocks.
             </p>
           </div>
         ) : (

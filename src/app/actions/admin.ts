@@ -23,7 +23,9 @@ async function resolveSellerId(userId: string): Promise<string> {
       ownerId: userId,
       slug: `admin-${userId.slice(-6).toLowerCase()}`,
       name: "Admin Shop",
-      whatsappE164: "0000000000",
+      // Owner fills in real WhatsApp number via /admin/settings. Placeholder
+      // string only — never rendered into any public HTML.
+      whatsappE164: "0",
       bio: "Admin-created shop. Rename it.",
     },
   });

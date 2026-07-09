@@ -10,7 +10,11 @@ export type Seller = {
   handle: string | null;
   bio: string | null;
   category: string;
-  whatsappE164: string;
+  // Contact fields are intentionally NOT exposed on the public Seller type.
+  // They live on the DB row but only ever flow through:
+  //   1. server actions (auth-gated, never serialized to public HTML)
+  //   2. /messages thread views (auth-gated)
+  // Search-engine crawlers and unauthenticated requests never see them.
   instagramUrl: string | null;
   logoUrl: string | null;
   bannerUrl: string | null;
@@ -55,7 +59,6 @@ function rowToSeller(row: SellerRow | null | undefined): Seller | null {
     handle: row.handle,
     bio: row.bio,
     category: row.category,
-    whatsappE164: row.whatsappE164,
     instagramUrl: row.instagramUrl,
     logoUrl: row.logoUrl,
     bannerUrl: row.bannerUrl,
@@ -227,11 +230,10 @@ export function formatPrice(value: number, currency = "PKR"): string {
   return `${currency} ${value.toLocaleString("en-PK")}`;
 }
 
-export function whatsappLink(number: string, message: string): string {
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-}
-
-export function instagramDmLink(handle: string, message: string): string {
-  const clean = handle.replace(/^@/, "");
-  return `https://ig.me/${clean}?text=${encodeURIComponent(message)}`;
-}
+// PUBLIC SURFACE NOTE:
+// `whatsappLink` and `instagramDmLink` previously lived here. They were
+// deleted because they let any page render a contact URL into static HTML
+// — which exposes the seller's phone number to crawlers and to anyone who
+// views page source. Contact is now exclusively surfaced through auth-gated
+// server actions (see /messages + /admin/messages) where the URL is only
+// constructed at request-time for the signed-in viewer.

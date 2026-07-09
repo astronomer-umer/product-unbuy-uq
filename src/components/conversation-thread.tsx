@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { sendMessageAction, markReadAction } from "@/app/actions/messages";
+import { revealContactAction } from "@/app/actions/contact";
 import { useRealtimeNotifications } from "@/hooks/use-realtime";
 
 type Msg = {
@@ -32,6 +33,8 @@ export function ConversationThread({
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, start] = useTransition();
+  const [contact, setContact] = useState<{ whatsappUrl: string | null; instagramUrl: string | null } | null>(null);
+  const [contactLoading, setContactLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,6 +71,19 @@ export function ConversationThread({
       const r = await sendMessageAction(conversationId, body);
       if ("error" in r) setError(r.error);
     });
+  }
+
+  async function handleRevealContact() {
+    setError(null);
+    setContactLoading(true);
+    const r = await revealContactAction(conversationId);
+    setContactLoading(false);
+    if (!r.ok) {
+      setError(r.error);
+      setContact(null);
+    } else {
+      setContact({ whatsappUrl: r.whatsappUrl, instagramUrl: r.instagramUrl });
+    }
   }
 
   return (
@@ -151,6 +167,50 @@ export function ConversationThread({
           Send
         </button>
       </form>
+
+      {/* Auth-gated contact reveal. The actual WhatsApp/IG deeplinks are
+          only fetched when the viewer clicks "Share contact" — they're
+          never present in any initial HTML, so search engines and
+          unauthenticated visitors never see them. */}
+      <div className="border-t border-border/60 px-4 py-3">
+        {contact === null ? (
+          <button
+            type="button"
+            onClick={handleRevealContact}
+            disabled={contactLoading}
+            className="font-mono text-xs uppercase tracking-wider text-cobalt hover:underline disabled:opacity-50"
+          >
+            {contactLoading ? "Revealing…" : "Share contact details"}
+          </button>
+        ) : (
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="font-mono uppercase tracking-wider text-muted-foreground">
+              Direct:
+            </span>
+            {contact.whatsappUrl && (
+              <a
+                href={contact.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-lime/15 px-2.5 py-1 font-mono uppercase tracking-wider text-lime hover:bg-lime hover:text-foreground transition-colors"
+              >
+                WhatsApp
+              </a>
+            )}
+            {contact.instagramUrl && (
+              <a
+                href={contact.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-cobalt/30 bg-cobalt/10 px-2.5 py-1 font-mono uppercase tracking-wider text-cobalt hover:bg-cobalt hover:text-white transition-colors"
+              >
+                Instagram
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+
       {error && <p className="px-4 pb-2 text-sm text-destructive">{error}</p>}
     </div>
   );

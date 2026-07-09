@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/auth";
 
 export default async function AdminLayout({
@@ -20,6 +21,12 @@ export default async function AdminLayout({
             Signed in as {session.user.email}
           </p>
         </div>
+        <Link
+          href="/admin/settings"
+          className="inline-flex h-9 items-center rounded-full border border-border bg-background px-3 text-xs font-semibold hover:bg-muted transition-colors"
+        >
+          Shop settings
+        </Link>
       </div>
       {children}
     </div>
