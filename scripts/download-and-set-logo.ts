@@ -77,7 +77,8 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`captured ${imageBuf.byteLength} bytes of ${imageMime}`);
+  const buf: Buffer = imageBuf;
+  console.log(`captured ${buf.byteLength} bytes of ${imageMime}`);
   const ext = imageMime.includes("png")
     ? "png"
     : imageMime.includes("webp")
@@ -85,7 +86,7 @@ async function main() {
       : "jpg";
   const filename = `logo-real-${Date.now()}.${ext}`;
   const dest = path.join(UPLOADS, filename);
-  writeFileSync(dest, imageBuf);
+  writeFileSync(dest, buf);
   const localPath = `/uploads/${filename}`;
   console.log(`saved to ${localPath}`);
 
