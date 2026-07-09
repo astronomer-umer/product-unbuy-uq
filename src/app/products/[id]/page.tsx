@@ -155,9 +155,20 @@ export default async function ProductPage({
             href={`/sellers/${seller.slug}`}
             className="group flex items-center gap-3 rounded-xl border border-border/60 p-3 transition-colors hover:border-lime/40 hover:bg-lime/5"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-lime/30 to-foreground font-heading text-lg text-background">
-              {seller.name.slice(0, 1)}
-            </div>
+            {seller.logoUrl ? (
+              <div className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full ring-1 ring-border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={seller.logoUrl}
+                  alt={`${seller.name} logo`}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-lime/30 to-foreground font-heading text-base text-background">
+                {seller.name.slice(0, 1)}
+              </div>
+            )}
             <div className="flex-1">
               <div className="font-heading text-base tracking-wide uppercase">
                 {seller.name}

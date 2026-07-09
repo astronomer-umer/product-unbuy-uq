@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import type { Seller } from "@/lib/catalog";
 
 export function SellerCard({ seller }: { seller: Seller }) {
-  const initial = seller.name.slice(0, 1).toUpperCase();
   return (
     <Link
       href={`/sellers/${seller.slug}`}
@@ -11,17 +10,17 @@ export function SellerCard({ seller }: { seller: Seller }) {
     >
       <Card className="h-full overflow-hidden border-border/60 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-lime/40 group-hover:shadow-md">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-foreground">
-          {seller.bannerUrl ? (
+          {seller.logoUrl ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
-              src={seller.bannerUrl}
-              alt={`${seller.name} banner`}
+              src={seller.logoUrl}
+              alt={`${seller.name}`}
               className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-lime/25 via-cobalt to-cobalt">
               <span className="font-heading text-8xl text-lime tracking-tight">
-                {initial}
+                {seller.name.slice(0, 1).toUpperCase()}
               </span>
             </div>
           )}

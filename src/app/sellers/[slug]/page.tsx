@@ -27,25 +27,37 @@ export default async function SellerPage({
         <div className="absolute inset-0 -z-10 opacity-40" aria-hidden="true">
           <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-lime/20 blur-3xl" />
         </div>
-        <div className="relative grid gap-6 p-8 sm:p-12 md:grid-cols-[1fr_auto] md:items-end">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.25em] text-lime">
-              {seller.category}
-            </p>
-            <h1 className="mt-3 font-heading text-5xl tracking-wide uppercase sm:text-7xl">
-              {seller.name}
-            </h1>
-            {seller.handle && (
-              <p className="mt-2 font-mono text-sm opacity-85">
-                @{seller.handle}
-              </p>
-            )}
-            {seller.bio && (
-              <p className="mt-5 max-w-xl text-sm leading-relaxed opacity-85">
-                {seller.bio}
-              </p>
-            )}
-          </div>
+          <div className="relative grid gap-6 p-8 sm:p-12 md:grid-cols-[1fr_auto] md:items-end">
+            <div className="flex items-start gap-4">
+              {seller.logoUrl && (
+                <div className="hidden h-24 w-24 flex-shrink-0 overflow-hidden rounded-2xl ring-2 ring-lime/40 sm:block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={seller.logoUrl}
+                    alt={`${seller.name} logo`}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )}
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.25em] text-lime">
+                  {seller.category}
+                </p>
+                <h1 className="mt-3 font-heading text-5xl tracking-wide uppercase sm:text-7xl">
+                  {seller.name}
+                </h1>
+                {seller.handle && (
+                  <p className="mt-2 font-mono text-sm opacity-85">
+                    @{seller.handle}
+                  </p>
+                )}
+                {seller.bio && (
+                  <p className="mt-5 max-w-xl text-sm leading-relaxed opacity-85">
+                    {seller.bio}
+                  </p>
+                )}
+              </div>
+            </div>
           <div className="flex flex-wrap gap-2">
             {seller.instagramUrl && (
               <a
