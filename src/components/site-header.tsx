@@ -82,12 +82,20 @@ export async function SiteHeader({ sellers = [] }: { sellers?: Seller[] }) {
               </form>
             </>
           ) : (
-            <Link
-              href="/login"
-              className="ml-1 inline-flex h-9 items-center rounded-full border border-border bg-background px-4 text-xs font-semibold hover:bg-muted transition-colors"
-            >
-              Sign in
-            </Link>
+            <div className="ml-1 flex items-center gap-1">
+              <Link
+                href="/login"
+                className="inline-flex h-9 items-center rounded-full border border-border bg-background px-4 text-xs font-semibold hover:bg-muted transition-colors"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/register"
+                className="inline-flex h-9 items-center rounded-full bg-lime px-4 text-xs font-semibold text-foreground hover:bg-lime/90 transition-colors"
+              >
+                Sell on unbuy
+              </Link>
+            </div>
           )}
         </div>
       </div>
