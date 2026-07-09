@@ -20,14 +20,14 @@ export function ProductCard({
       aria-label={`${product.title} — ${formatPrice(product.price, product.currency)}`}
     >
       <Card className="h-full overflow-hidden border-border/60 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-lime/40 group-hover:shadow-md">
-        <div className="relative aspect-square w-full overflow-hidden bg-muted">
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
           {cover && (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
               src={cover}
               alt={product.title}
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              className="absolute inset-0 h-full w-full object-contain transition-transform duration-500 ease-out group-hover:scale-[1.03]"
             />
           )}
           {isSold && (

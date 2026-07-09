@@ -88,14 +88,14 @@ export default async function ProductPage({
           {product.images.map((img, i) => (
             <div
               key={img.id}
-              className="overflow-hidden rounded-xl bg-muted aspect-square"
+              className="overflow-hidden rounded-xl bg-muted aspect-[4/5]"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={img.url}
                 alt={`${product.title} — image ${i + 1}`}
                 loading={i === 0 ? "eager" : "lazy"}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-contain"
               />
             </div>
           ))}
