@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getConversationForViewer, getInboxWithUnread } from "@/lib/messaging";
+import { ConversationThread } from "@/components/conversation-thread";
 
 type SearchParams = Promise<{ c?: string }>;
 
@@ -137,29 +138,24 @@ export default async function MessagesPage({
                   </p>
                 </div>
               </div>
-              {await (async () => {
-                const Thread = (await import("@/components/conversation-thread")).ConversationThread;
-                return (
-                  <Thread
-                    conversationId={openConv.id}
-                    viewerId={session.user.id}
-                    productTitle={openConv.product.title}
-                    otherPartyName={openConv.seller.name}
-                    initialMessages={openConv.messages.map((m) => ({
-                      id: m.id,
-                      conversationId: m.conversationId,
-                      senderId: m.senderId,
-                      body: m.body,
-                      createdAt: m.createdAt.toISOString(),
-                      sender: {
-                        id: m.sender.id,
-                        name: m.sender.name,
-                        email: m.sender.email,
-                      },
-                    }))}
-                  />
-                );
-              })()}
+              <ConversationThread
+                conversationId={openConv.id}
+                viewerId={session.user.id}
+                productTitle={openConv.product.title}
+                otherPartyName={openConv.seller.name}
+                initialMessages={openConv.messages.map((m) => ({
+                  id: m.id,
+                  conversationId: m.conversationId,
+                  senderId: m.senderId,
+                  body: m.body,
+                  createdAt: m.createdAt.toISOString(),
+                  sender: {
+                    id: m.sender.id,
+                    name: m.sender.name,
+                    email: m.sender.email,
+                  },
+                }))}
+              />
             </div>
           ) : (
             <div className="flex h-[calc(100vh-12rem)] items-center justify-center rounded-xl border border-dashed border-border">

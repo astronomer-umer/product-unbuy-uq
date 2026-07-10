@@ -13,7 +13,11 @@ import { prisma } from "@/lib/db";
 import { getSellerContact } from "@/lib/contact";
 
 const schema = z.object({
-  conversationId: z.string().min(1),
+  conversationId: z
+    .string()
+    .min(1)
+    .max(64)
+    .regex(/^[a-z0-9]+$/i, "Invalid conversation id"),
 });
 
 export type ContactRevealResult =
@@ -29,20 +33,14 @@ export async function revealContactAction(
   }
 
   const parsed = schema.safeParse({ conversationId });
-  if (!parsed.success) return { ok: false, error: "Bad request" };
-
-  // Rate-limit: max 30 reveals per user per hour
-  const hourAgo = new Date(Date.now() - 60 * 60 * 1000);
-  const recentNotifications = await prisma.notification.count({
-    where: {
-      userId: session.user.id,
-      kind: "message",
-      createdAt: { gte: hourAgo },
-    },
-  });
-  if (recentNotifications > 200) {
-    return { ok: false, error: "Too many requests — slow down." };
+  if (!parsed.success) {
+    return { ok: false, error: "Bad request" };
   }
+
+  // NOTE: getSellerContact() already validates that viewerId is a party
+  // to the conversation (buyer or seller-owner). It's the only path
+  // through which a contact URL is ever returned. Never construct
+  // wa.me URLs or instagram URLs anywhere else.
 
   const contact = await getSellerContact({
     viewerId: session.user.id,

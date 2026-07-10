@@ -26,7 +26,8 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:6969",
+    process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://unbuy-store.vercel.app",
   ),
   title: {
     default: "unbuy · Preloved, on purpose",

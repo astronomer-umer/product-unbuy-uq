@@ -70,9 +70,10 @@ export async function loginAction(
   formData: FormData,
 ): Promise<FormState> {
   const ip = getClientIp();
-  const rl = rateLimit(`login:${ip}`, 10, 60 * 60 * 1000);
-  if (!rl.ok) {
-    return { error: "Too many attempts. Try again later." };
+  // IP bucket: 10 attempts / hour / IP, broad rate limit
+  const rlIp = rateLimit(`login:${ip}`, 10, 60 * 60 * 1000);
+  if (!rlIp.ok) {
+    return { error: "Too many attempts from this network. Try again later." };
   }
 
   const parsed = loginSchema.safeParse({
@@ -82,6 +83,19 @@ export async function loginAction(
 
   if (!parsed.success) {
     return { error: "Email and password required" };
+  }
+
+  // Email bucket: 5 attempts / 15 min / email. Catches brute force
+  // rotating across IPs (e.g., botnet targeting one account).
+  const rlEmail = rateLimit(
+    `login-email:${parsed.data.email}`,
+    5,
+    15 * 60 * 1000,
+  );
+  if (!rlEmail.ok) {
+    return {
+      error: "Too many attempts on this account. Try again in 15 minutes.",
+    };
   }
 
   try {
